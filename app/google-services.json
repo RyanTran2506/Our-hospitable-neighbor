@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "40695931803",
+    "firebase_url": "https://csis-3175-firebase.firebaseio.com",
+    "project_id": "csis-3175-firebase",
+    "storage_bucket": "csis-3175-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40695931803:android:367c96c0d6729d7990b73e",
+        "android_client_info": {
+          "package_name": "com.example.ourhospitableneighbor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40695931803-c68v6v1afg2uhlg1bsc01288cql521ao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEKUoVaDFKWAwF5lHqD4R7d-jPIVVBEeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40695931803-c68v6v1afg2uhlg1bsc01288cql521ao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
