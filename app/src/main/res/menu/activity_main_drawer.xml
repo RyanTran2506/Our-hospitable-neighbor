@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nav_item_create_post" android:title="Create New Post"></item>
-    <item android:id="@+id/nav_item_my_profile" android:title="My Profile"></item>
-    <item android:id="@+id/nav_item_my_posts" android:title="My Posts"></item>
+    <item
+        android:id="@+id/nav_item_create_post"
+        android:icon="@drawable/ic_baseline_create_24"
+        android:title="Create New Post" />
+    <item
+        android:id="@+id/nav_item_my_profile"
+        android:icon="@drawable/ic_baseline_face_24"
+        android:iconTint="@color/colorPrimary"
+        android:title="My Profile" />
+    <item
+        android:id="@+id/nav_item_my_posts"
+        android:icon="@drawable/ic_baseline_history_24"
+        android:title="My Posts" />
 </menu>
