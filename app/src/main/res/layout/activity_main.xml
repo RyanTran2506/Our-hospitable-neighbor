@@ -13,8 +13,8 @@
 
 
         <fragment
-            android:id="@+id/posts_map"
-            android:name="com.example.ourhospitableneighbor.PostsMapFragment"
+            android:id="@+id/jobs_map"
+            android:name="com.example.ourhospitableneighbor.JobsMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

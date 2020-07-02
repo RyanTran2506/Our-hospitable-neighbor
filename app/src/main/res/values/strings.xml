@@ -3,4 +3,9 @@
     <string name="navigation_drawer_open">Open side menu</string>
     <string name="navigation_drawer_close">Close side menu</string>
     <string name="log_out">Log out</string>
+    <plurals name="number_of_job_found">
+        <item quantity="zero">No job in this area</item>
+        <item quantity="one">1 job in this area</item>
+        <item quantity="other">%d job in this area</item>
+    </plurals>
 </resources>
