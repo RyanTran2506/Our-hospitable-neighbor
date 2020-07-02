@@ -1,22 +1,33 @@
 package com.example.ourhospitableneighbor.view;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import java.util.function.Function;
+import com.example.ourhospitableneighbor.R;
 
 public class PanelView extends LinearLayout {
-    public Function<MotionEvent,Boolean> interceptTouchEventHandler;
-    private Integer touchSlop;
+    private int touchSlop;
     private boolean isScrolling;
-    private float initialY;
+    private boolean isCollapsed = true;
+
+    private Float initialY;
+    private VelocityTracker tracker;
+    private final float VELOCITY_CUTOFF = 200;
+
+    private PanelView panel;
+    private ViewGroup panelHeader;
+
 
     public PanelView(Context context) {
         super(context);
@@ -64,7 +75,7 @@ public class PanelView extends LinearLayout {
 
                 // Touch slop should be calculated using ViewConfiguration
                 // constants.
-                if (yDiff > getTouchSlop()) {
+                if (yDiff > touchSlop) {
                     // Start scrolling!
                     isScrolling = true;
                     return true;
@@ -78,11 +89,99 @@ public class PanelView extends LinearLayout {
         return false;
     }
 
-    private Integer getTouchSlop() {
-        if (touchSlop == null) {
-            ViewConfiguration vc = ViewConfiguration.get(getContext());
-            touchSlop = vc.getScaledTouchSlop();
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ViewConfiguration vc = ViewConfiguration.get(getContext());
+        touchSlop = vc.getScaledTouchSlop();
+        configurePanel();
+    }
+
+    private void configurePanel() {
+        panel = this;
+        panelHeader = this.findViewById(R.id.panel_header);
+        panelHeader.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            int height = bottom - top;
+            panel.setTranslationY(-height);
+        });
+        panelHeader.setOnClickListener(v -> {
+            toggleCollapse();
+            animateSnap();
+        });
+        panel.setOnTouchListener(this::onPanelTouch);
+    }
+
+    private void toggleCollapse() {
+        isCollapsed = !isCollapsed;
+    }
+
+    private void animateSnap() {
+        float headerHeight = getPanelHeaderHeight();
+        float panelHeight = getPanelHeight();
+        float target = isCollapsed ? -headerHeight : -panelHeight;
+        ObjectAnimator animation = ObjectAnimator.ofFloat(panel, "translationY", target);
+        animation.setDuration((long) (300 * Math.abs((panel.getTranslationY() - target) / (panelHeight - headerHeight))));
+        animation.start();
+    }
+
+    private int getPanelHeight() {
+        return panel.getMeasuredHeight();
+    }
+
+    private int getPanelHeaderHeight() {
+        return panelHeader.getMeasuredHeight();
+    }
+
+    private boolean onPanelTouch(View v, MotionEvent event) {
+        float headerHeight = getPanelHeaderHeight();
+        float panelHeight = getPanelHeight();
+        float initialPosition = isCollapsed ? headerHeight : panelHeight;
+        event.offsetLocation(0, panel.getTranslationY() + initialPosition);
+
+        float currentY = event.getY();
+        if (initialY == null) initialY = currentY;
+
+        float diff = initialY - currentY;
+        float translationY = -Math.max(Math.min(initialPosition + diff, panelHeight), headerHeight);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                tracker = VelocityTracker.obtain();
+                tracker.addMovement(event);
+
+                initialY = event.getY();
+                return true;
+
+            case MotionEvent.ACTION_MOVE:
+                if (tracker == null) tracker = VelocityTracker.obtain();
+                tracker.addMovement(event);
+
+                panel.setTranslationY(translationY);
+                return true;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (tracker == null) tracker = VelocityTracker.obtain();
+                tracker.addMovement(event);
+                tracker.computeCurrentVelocity(1000);
+                float velocity = tracker.getYVelocity();
+                tracker.recycle();
+                tracker = null;
+
+                if (Math.abs(velocity) >= VELOCITY_CUTOFF) {
+                    isCollapsed = velocity > 0;
+                } else {
+                    if (isCollapsed) {
+                        isCollapsed = diff <= (panelHeight - headerHeight) / 2;
+                    } else {
+                        isCollapsed = -diff >= (panelHeight - headerHeight) / 2;
+                    }
+                }
+
+                animateSnap();
+                initialY = null;
+                return true;
         }
-        return touchSlop;
+        return false;
     }
 }
