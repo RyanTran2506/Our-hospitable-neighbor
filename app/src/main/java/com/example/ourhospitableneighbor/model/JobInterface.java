@@ -39,4 +39,6 @@ public interface JobInterface {
     List<String> getImageIDs();
 
     void setImageIDs(List<String> ids);
+
+    String getThumbnail();
 }

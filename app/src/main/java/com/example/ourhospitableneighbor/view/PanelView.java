@@ -4,17 +4,28 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
+import com.example.ourhospitableneighbor.model.JobInterface;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PanelView extends LinearLayout {
     private int touchSlop;
@@ -27,7 +38,9 @@ public class PanelView extends LinearLayout {
 
     private PanelView panel;
     private ViewGroup panelHeader;
-
+    private ViewGroup panelItemsContainer;
+    private List<JobInterface> jobs;
+    private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     public PanelView(Context context) {
         super(context);
@@ -89,12 +102,44 @@ public class PanelView extends LinearLayout {
         return false;
     }
 
+    public void setJobs(List<JobInterface> jobs) {
+        this.jobs = jobs;
+
+        TextView txtJobCount = findViewById(R.id.txt_job_count);
+        txtJobCount.setVisibility(VISIBLE);
+        txtJobCount.setText(getResources().getQuantityString(R.plurals.number_of_job_found, jobs.size(), jobs.size()));
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        panelItemsContainer.removeAllViews();
+        for (int i = 0; i < jobs.size() && i < 3; i++) {
+            JobInterface job = jobs.get(i);
+
+            View panelItem = inflater.inflate(R.layout.panel_item, null);
+            TextView title = panelItem.findViewById(R.id.txt_title);
+            title.setText(job.getJobTitle());
+
+            TextView address = panelItem.findViewById(R.id.txt_address);
+            address.setText(job.getAddress());
+
+            String thumbnail = job.getThumbnail();
+            if (thumbnail != null) {
+                ImageView img = panelItem.findViewById(R.id.imageView);
+                Glide.with(getContext()).load(storageReference.child(thumbnail)).into(img);
+            }
+
+            panelItemsContainer.addView(panelItem);
+        }
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+
         ViewConfiguration vc = ViewConfiguration.get(getContext());
         touchSlop = vc.getScaledTouchSlop();
+
         configurePanel();
+        panelItemsContainer = findViewById(R.id.panel_item_container);
     }
 
     private void configurePanel() {
@@ -102,7 +147,9 @@ public class PanelView extends LinearLayout {
         panelHeader = this.findViewById(R.id.panel_header);
         panelHeader.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int height = bottom - top;
-            panel.setTranslationY(-height);
+            if (panel.getTranslationY() == 0) {
+                panel.setTranslationY(-height);
+            }
         });
         panelHeader.setOnClickListener(v -> {
             toggleCollapse();
@@ -121,6 +168,7 @@ public class PanelView extends LinearLayout {
         float target = isCollapsed ? -headerHeight : -panelHeight;
         ObjectAnimator animation = ObjectAnimator.ofFloat(panel, "translationY", target);
         animation.setDuration((long) (300 * Math.abs((panel.getTranslationY() - target) / (panelHeight - headerHeight))));
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.start();
     }
 

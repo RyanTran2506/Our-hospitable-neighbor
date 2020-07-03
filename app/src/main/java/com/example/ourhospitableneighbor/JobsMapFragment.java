@@ -1,28 +1,21 @@
 package com.example.ourhospitableneighbor;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ourhospitableneighbor.model.JobInterface;
-import com.example.ourhospitableneighbor.model.MockJob;
+import com.example.ourhospitableneighbor.model.Job;
 import com.example.ourhospitableneighbor.view.PanelView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,8 +23,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -40,15 +31,17 @@ public class JobsMapFragment extends Fragment {
 
     private GoogleMap map;
     private SupportMapFragment mapFragment;
+    private PanelView panel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_jobs_map, container, false);
+        panel = rootView.findViewById(R.id.panel);
         addMapFragment();
         return rootView;
     }
-    
+
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -126,10 +119,13 @@ public class JobsMapFragment extends Fragment {
     }
 
     private void showJobs() {
-        List<JobInterface> jobs = MockJob.getJobs();
-        for (JobInterface job : jobs) {
-            map.addMarker(createMarkerFromJob(job));
-        }
+        JobService.getInstance().getAllJobs().addOnSuccessListener(jobs -> {
+            panel.setJobs(jobs);
+            map.clear();
+            for (JobInterface job : jobs) {
+                map.addMarker(createMarkerFromJob(job));
+            }
+        });
     }
 
     private MarkerOptions createMarkerFromJob(JobInterface job) {

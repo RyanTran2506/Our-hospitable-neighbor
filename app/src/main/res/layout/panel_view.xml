@@ -32,14 +32,17 @@
             android:background="@color/separator" />
 
         <TextView
+            android:id="@+id/txt_job_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="7dp"
             android:text="No job in this area"
             android:textColor="#333"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <View
@@ -47,8 +50,31 @@
         android:layout_height="1dp"
         android:background="@color/separator" />
 
-    <View
+    <LinearLayout
+        android:id="@+id/panel_item_container"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/panel_item" />
+
+        <include layout="@layout/panel_item" />
+
+        <include layout="@layout/panel_item" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:minHeight="0dp"
+            android:padding="10dp"
+            android:text="@string/view_all"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 </com.example.ourhospitableneighbor.view.PanelView>

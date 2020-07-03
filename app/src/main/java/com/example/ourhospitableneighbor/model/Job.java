@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MockJob implements JobInterface {
+public class Job implements JobInterface {
     private String jobID;
     private String jobTitle;
     private JobStatus status;
@@ -18,28 +18,28 @@ public class MockJob implements JobInterface {
     public static List<JobInterface> getJobs() {
         List<JobInterface > JOBS = new ArrayList<>();
 
-        JobInterface job = new MockJob();
+        JobInterface job = new Job();
         job.setLatitude(49.204029);
         job.setLongitude(-122.912883);
         job.setJobTitle("Something something at Douglas College");
         JOBS.add(job);
 
-        job = new MockJob();
+        job = new Job();
         job.setLatitude(49.212926);
         job.setLongitude(-122.922803);
         JOBS.add(job);
 
-        job = new MockJob();
+        job = new Job();
         job.setLatitude(49.215978);
         job.setLongitude(-122.909250);
         JOBS.add(job);
 
-        job = new MockJob();
+        job = new Job();
         job.setLatitude(49.212060);
         job.setLongitude(-122.927357);
         JOBS.add(job);
 
-        job = new MockJob();
+        job = new Job();
         job.setLatitude(49.223533);
         job.setLongitude(-122.932613);
         JOBS.add(job);
@@ -135,5 +135,12 @@ public class MockJob implements JobInterface {
     @Override
     public void setImageIDs(List<String> imageIDs) {
         this.imageIDs = imageIDs;
+    }
+
+    @Override
+    public String getThumbnail() {
+        List<String> imageIDs = getImageIDs();
+        if (imageIDs == null || imageIDs.isEmpty()) return null;
+        return imageIDs.get(0);
     }
 }
