@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">OurHospitableNeighbor</string>
+
+    <!--These string are for post-a-job activity-->
+    <string name="postNewJob">Post A New Job</string>
+    <string name="btnPost">Post</string>
+    <string name="edtJobName">Job Name</string>
+    <string name="edtJobAddress">Address</string>
+    <string name="edtJobPostalCode">Postal Code</string>
+    <string name="txtJobPayment">Payment:</string>
+    <string-array name="grpPayments">
+        <item>By working hours</item>
+        <item>Finish the whole job</item>
+    </string-array>
+    <string name="txtPaymentRateName">/Hrs</string>
+
+    <!--These string are for job-detail activity-->
+    <string name="jobDetailTitle">Job Detail</string>
+    <string name="btnAcceptJob">Accept this Job</string>
+    <string name="btnBack">Back</string>
 </resources>
