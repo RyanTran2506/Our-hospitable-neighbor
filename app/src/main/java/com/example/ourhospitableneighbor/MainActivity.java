@@ -1,5 +1,6 @@
 package com.example.ourhospitableneighbor;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickCreatePost() {
-        // TODO: Navigate to a different activity
-        Toast.makeText(this, "Create Post", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, PostJob.class);
+        startActivity(intent);
     }
 
     private void onClickMyProfile() {
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickMyPosts() {
-        // TODO: Navigate to a different activity
-        Toast.makeText(this, "My Posts", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, History.class);
+        startActivity(intent);
     }
 
     private void onClickLogOut() {

@@ -13,6 +13,10 @@ public class Job {
     private String ownerID;
     private LocalDate date;
     private List<String> imageIDs;
+    private int paymentType;  //assume that payPerHour(type = 0), payPerFinishJob(type = 1)
+    private int expectedHrs;    //How long to finish the job
+    private double rate;    //rate per hrs
+    private double totalPay;    //Total payment amt
 
     public String getJobID() {
         return jobID;
@@ -91,5 +95,37 @@ public class Job {
         List<String> imageIDs = getImageIDs();
         if (imageIDs == null || imageIDs.isEmpty()) return null;
         return imageIDs.get(0);
+    }
+
+    public int getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(int paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public int getExpectedHrs() {
+        return expectedHrs;
+    }
+
+    public void setExpectedHrs(int expectedHrs) {
+        this.expectedHrs = expectedHrs;
+    }
+
+    public double getRate() {
+        return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public double getTotalPay() {
+        return totalPay;
+    }
+
+    public void setTotalPay(double totalPay) {
+        this.totalPay = totalPay;
     }
 }
