@@ -23,7 +23,7 @@ import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
-import com.example.ourhospitableneighbor.model.JobInterface;
+import com.example.ourhospitableneighbor.model.Job;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -41,7 +41,7 @@ public class PanelView extends LinearLayout {
     private PanelView panel;
     private ViewGroup panelHeader;
     private ViewGroup panelItemsContainer;
-    private List<JobInterface> jobs;
+    private List<Job> jobs;
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     private Animator panelAnimator;
@@ -107,7 +107,7 @@ public class PanelView extends LinearLayout {
         return false;
     }
 
-    public void setJobs(List<JobInterface> jobs) {
+    public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
 
         findViewById(R.id.progress_job_count).setVisibility(INVISIBLE);
@@ -120,7 +120,7 @@ public class PanelView extends LinearLayout {
         panelItemsContainer.removeAllViews();
 
         for (int i = 0; i < jobs.size() && i < 3; i++) {
-            JobInterface job = jobs.get(i);
+            Job job = jobs.get(i);
 
             View panelItem = inflater.inflate(R.layout.panel_item, null);
             TextView title = panelItem.findViewById(R.id.txt_title);

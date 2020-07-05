@@ -1,7 +1,6 @@
 package com.example.ourhospitableneighbor;
 
 import com.example.ourhospitableneighbor.model.Job;
-import com.example.ourhospitableneighbor.model.JobInterface;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -17,8 +16,8 @@ import java.util.Objects;
 public class JobService {
     private static JobService instance;
     private CollectionReference collection;
-    private List<JobInterface> jobs;
-    private Task<List<JobInterface>> getAllJobsTask;
+    private List<Job> jobs;
+    private Task<List<Job>> getAllJobsTask;
 
     public static JobService getInstance() {
         if (instance == null) instance = new JobService();
@@ -30,7 +29,7 @@ public class JobService {
         collection = db.collection("jobs");
     }
 
-    public Task<List<JobInterface>> getAllJobs() {
+    public Task<List<Job>> getAllJobs() {
         if (jobs != null) return Tasks.call(() -> jobs);
         if (getAllJobsTask == null) {
             getAllJobsTask = collection.get().continueWith(task -> {
@@ -46,12 +45,12 @@ public class JobService {
         return getAllJobsTask;
     }
 
-    public Task<List<JobInterface>> getJobsInArea(LatLngBounds area) {
+    public Task<List<Job>> getJobsInArea(LatLngBounds area) {
         return getAllJobs().continueWith(task -> {
-            List<JobInterface> allJobs = task.getResult();
-            List<JobInterface> jobsInArea = new ArrayList<>();
+            List<Job> allJobs = task.getResult();
+            List<Job> jobsInArea = new ArrayList<>();
 
-            for (JobInterface job : allJobs) {
+            for (Job job : allJobs) {
                 double lat = job.getLatitude();
                 double lng = job.getLongitude();
                 if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
@@ -63,7 +62,7 @@ public class JobService {
         });
     }
 
-    private JobInterface mapDocumentToJob(DocumentSnapshot doc) {
+    private Job mapDocumentToJob(DocumentSnapshot doc) {
         Job job = new Job();
         job.setJobTitle(doc.getString("title"));
         job.setAddress(doc.getString("address"));

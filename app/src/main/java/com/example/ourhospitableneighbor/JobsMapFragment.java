@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ourhospitableneighbor.model.JobInterface;
+import com.example.ourhospitableneighbor.model.Job;
 import com.example.ourhospitableneighbor.view.PanelView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -140,13 +140,13 @@ public class JobsMapFragment extends Fragment {
     private void showAllJobMarkers() {
         JobService.getInstance().getAllJobs().addOnSuccessListener(jobs -> {
             map.clear();
-            for (JobInterface job : jobs) {
+            for (Job job : jobs) {
                 map.addMarker(createMarkerFromJob(job));
             }
         });
     }
 
-    private MarkerOptions createMarkerFromJob(JobInterface job) {
+    private MarkerOptions createMarkerFromJob(Job job) {
         return new MarkerOptions()
                 .position(new LatLng(job.getLatitude(), job.getLongitude()))
                 .title(job.getJobTitle());
