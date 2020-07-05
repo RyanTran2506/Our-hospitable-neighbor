@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ourhospitableneighbor.model.JobInterface;
-import com.example.ourhospitableneighbor.model.Job;
 import com.example.ourhospitableneighbor.view.PanelView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class JobsMapFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -32,6 +33,7 @@ public class JobsMapFragment extends Fragment {
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private PanelView panel;
+    private Debouncer showJobsDebouncer = new Debouncer();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,10 +69,12 @@ public class JobsMapFragment extends Fragment {
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
+        map.setOnCameraIdleListener(this::showJobsInAreaDebounced);
+        map.getUiSettings().setMapToolbarEnabled(false);
+
         setUpCompassButton();
         setInitialViewPoint();
-        map.getUiSettings().setMapToolbarEnabled(false);
-        showJobs();
+        showAllJobMarkers();
     }
 
     private void setInitialViewPoint() {
@@ -87,8 +91,8 @@ public class JobsMapFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     private void setUpMyLocationButton() {
-        map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
 
         View mapView = mapFragment.getView();
         if (mapView == null) return;
@@ -118,9 +122,23 @@ public class JobsMapFragment extends Fragment {
         rlp.setMargins(0, 0, 0, 30);
     }
 
-    private void showJobs() {
+    private void showJobsInAreaDebounced() {
+        showJobsDebouncer.debounce(this::showJobsInArea, 200, TimeUnit.MILLISECONDS);
+    }
+
+    private void showJobsInArea() {
+        getActivity().runOnUiThread(() -> {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            AsyncTask.execute(() -> {
+                JobService.getInstance().getJobsInArea(bounds).addOnSuccessListener(jobs -> {
+                    panel.setJobs(jobs);
+                });
+            });
+        });
+    }
+
+    private void showAllJobMarkers() {
         JobService.getInstance().getAllJobs().addOnSuccessListener(jobs -> {
-            panel.setJobs(jobs);
             map.clear();
             for (JobInterface job : jobs) {
                 map.addMarker(createMarkerFromJob(job));
