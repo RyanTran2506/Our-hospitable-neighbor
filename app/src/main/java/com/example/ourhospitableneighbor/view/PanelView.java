@@ -7,24 +7,19 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
 import com.example.ourhospitableneighbor.model.Job;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -39,7 +34,6 @@ public class PanelView extends LinearLayout {
     private PanelView panel;
     private ViewGroup panelHeader;
     private ViewGroup panelItemsContainer;
-    private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     private Animator panelAnimator;
     private Animator itemsContainerAnimator;
@@ -106,26 +100,12 @@ public class PanelView extends LinearLayout {
         txtJobCount.setVisibility(VISIBLE);
         txtJobCount.setText(getResources().getQuantityString(R.plurals.number_of_job_found, jobs.size(), jobs.size()));
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
         panelItemsContainer.removeAllViews();
-
         for (int i = 0; i < jobs.size() && i < 3; i++) {
             Job job = jobs.get(i);
-
-            View panelItem = inflater.inflate(R.layout.panel_item, this, false);
-            TextView title = panelItem.findViewById(R.id.txt_title);
-            title.setText(job.getJobTitle());
-
-            TextView address = panelItem.findViewById(R.id.txt_address);
-            address.setText(job.getAddress());
-
-            String thumbnail = job.getThumbnail();
-            if (thumbnail != null) {
-                ImageView img = panelItem.findViewById(R.id.imageView);
-                Glide.with(getContext()).load(storageReference.child(thumbnail)).into(img);
-            }
-
-            panelItemsContainer.addView(panelItem);
+            PanelItemView item = new PanelItemView(getContext());
+            item.setJob(job);
+            panelItemsContainer.addView(item);
         }
 
         panelItemsContainer.invalidate();
