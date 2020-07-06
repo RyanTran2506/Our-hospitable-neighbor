@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
@@ -36,12 +35,10 @@ public class PanelView extends LinearLayout {
 
     private Float initialY;
     private VelocityTracker tracker;
-    private final float VELOCITY_CUTOFF = 200;
 
     private PanelView panel;
     private ViewGroup panelHeader;
     private ViewGroup panelItemsContainer;
-    private List<Job> jobs;
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     private Animator panelAnimator;
@@ -57,11 +54,6 @@ public class PanelView extends LinearLayout {
 
     public PanelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PanelView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
@@ -108,8 +100,6 @@ public class PanelView extends LinearLayout {
     }
 
     public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
-
         findViewById(R.id.progress_job_count).setVisibility(INVISIBLE);
 
         TextView txtJobCount = findViewById(R.id.txt_job_count);
@@ -122,7 +112,7 @@ public class PanelView extends LinearLayout {
         for (int i = 0; i < jobs.size() && i < 3; i++) {
             Job job = jobs.get(i);
 
-            View panelItem = inflater.inflate(R.layout.panel_item, null);
+            View panelItem = inflater.inflate(R.layout.panel_item, this, false);
             TextView title = panelItem.findViewById(R.id.txt_title);
             title.setText(job.getJobTitle());
 
@@ -140,7 +130,13 @@ public class PanelView extends LinearLayout {
 
         panelItemsContainer.invalidate();
         panelItemsContainer.requestLayout();
+        snap(false);
         snapItemsContainer(!isCollapsed);
+    }
+
+    public void setCollapse(boolean isCollapsed, boolean shouldAnimate) {
+        this.isCollapsed = isCollapsed;
+        snap(shouldAnimate);
     }
 
     @Override
@@ -153,6 +149,7 @@ public class PanelView extends LinearLayout {
         configurePanel();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void configurePanel() {
         panel = this;
         panelItemsContainer = findViewById(R.id.panel_item_container);
@@ -162,9 +159,7 @@ public class PanelView extends LinearLayout {
             snap(true);
         });
         panel.setOnTouchListener(this::onPanelTouch);
-        panel.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            snap(false);
-        });
+        snap(false);
     }
 
     private void toggleCollapse() {
@@ -172,12 +167,7 @@ public class PanelView extends LinearLayout {
     }
 
     private void snapItemsContainer(boolean shouldAnimate) {
-        if (shouldAnimate) {
-            if (panelAnimator != null) {
-                panelAnimator.end();
-                panelAnimator = null;
-            }
-
+        if (shouldAnimate && panelAnimator == null) {
             int oldHeight = panelItemsContainer.getHeight();
             panelItemsContainer.measure(0, 0);
             int newHeight = panelItemsContainer.getMeasuredHeight();
@@ -195,27 +185,25 @@ public class PanelView extends LinearLayout {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     itemsContainerAnimator = null;
-                    snap(false);
                 }
             });
             anim.start();
             itemsContainerAnimator = anim;
         } else {
+            stopSnapAnimation();
+
             ViewGroup.LayoutParams layoutParams = panelItemsContainer.getLayoutParams();
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             panelItemsContainer.setLayoutParams(layoutParams);
+
+            snap(false);
         }
     }
 
 
-    private void snap(boolean shouldAnimate) {
-        if (shouldAnimate) {
-            if (itemsContainerAnimator != null) {
-                itemsContainerAnimator.end();
-                itemsContainerAnimator = null;
-                return;
-            }
-
+    public void snap(boolean shouldAnimate) {
+        if (shouldAnimate && itemsContainerAnimator == null) {
+            panel.measure(0, 0);
             float headerHeight = getPanelHeaderHeight();
             float panelHeight = getPanelHeight();
             float target = isCollapsed ? (panelHeight - headerHeight) : 0;
@@ -223,13 +211,37 @@ public class PanelView extends LinearLayout {
             ObjectAnimator animation = ObjectAnimator.ofFloat(panel, "translationY", target);
             animation.setDuration((long) (300 * Math.abs((panel.getTranslationY() - target) / (panelHeight - headerHeight))));
             animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            animation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    panelAnimator = null;
+                }
+            });
             animation.start();
             panelAnimator = animation;
         } else {
+            stopItemsContainerSnapAnimation();
+
+            panel.measure(0, 0);
             float headerHeight = getPanelHeaderHeight();
             float panelHeight = getPanelHeight();
             float target = isCollapsed ? (panelHeight - headerHeight) : 0;
+
             panel.setTranslationY(target);
+        }
+    }
+
+    private void stopSnapAnimation() {
+        if (panelAnimator != null) {
+            panelAnimator.end();
+            panelAnimator = null;
+        }
+    }
+
+    private void stopItemsContainerSnapAnimation() {
+        if (itemsContainerAnimator != null) {
+            itemsContainerAnimator.end();
+            itemsContainerAnimator = null;
         }
     }
 
@@ -253,6 +265,7 @@ public class PanelView extends LinearLayout {
         float diff = initialY - currentY;
         float translationY = Math.max(Math.min(initialPosition - diff, panelHeight - headerHeight), 0);
 
+        float VELOCITY_CUTOFF = 200;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 tracker = VelocityTracker.obtain();

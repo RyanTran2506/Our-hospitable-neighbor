@@ -34,6 +34,7 @@ public class JobsMapFragment extends Fragment {
     private SupportMapFragment mapFragment;
     private PanelView panel;
     private Debouncer showJobsDebouncer = new Debouncer();
+    private boolean loadingJobsFirstTime = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,6 +133,10 @@ public class JobsMapFragment extends Fragment {
             AsyncTask.execute(() -> {
                 JobService.getInstance().getJobsInArea(bounds).addOnSuccessListener(jobs -> {
                     panel.setJobs(jobs);
+                    if (loadingJobsFirstTime) {
+                        panel.setCollapse(false, true);
+                        loadingJobsFirstTime = false;
+                    }
                 });
             });
         });
