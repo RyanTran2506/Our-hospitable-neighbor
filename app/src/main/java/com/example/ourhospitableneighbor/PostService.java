@@ -44,7 +44,7 @@ public class PostService {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 posts = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    posts.add(mapDocumentToPost(child));
+                    posts.add(Post.fromFirebaseSnapshot(child));
                 }
                 onSuccess.accept(posts);
             }
@@ -86,22 +86,5 @@ public class PostService {
 
     public void setUserCurrentLocation(Location location) {
         this.userCurrentLocation = location;
-    }
-
-    private Post mapDocumentToPost(DataSnapshot doc) {
-        Post post = new Post();
-        post.setPostTitle(doc.child("title").getValue(String.class));
-        post.setAddress(doc.child("address").getValue(String.class));
-        post.setOwnerID(doc.child("ownerID").getValue(String.class));
-
-        List<String> imageIDs = new ArrayList<>();
-        for (DataSnapshot c : doc.child("images").getChildren()) {
-            imageIDs.add(c.getValue(String.class));
-        }
-        post.setImageIDs(imageIDs);
-
-        post.setLatitude(doc.child("coords/lat").getValue(Double.class));
-        post.setLongitude(doc.child("coords/lng").getValue(Double.class));
-        return post;
     }
 }

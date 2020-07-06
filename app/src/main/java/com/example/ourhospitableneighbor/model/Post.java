@@ -2,7 +2,10 @@ package com.example.ourhospitableneighbor.model;
 
 import android.location.Location;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
@@ -20,6 +23,24 @@ public class Post {
     private double rate;    //rate per hrs
     private double totalPay;    //Total payment amt
     private Float distanceFromUserLocation;
+
+    public static Post fromFirebaseSnapshot(DataSnapshot doc) {
+        // TODO: handle the remaining fields
+        Post post = new Post();
+        post.setPostTitle(doc.child("title").getValue(String.class));
+        post.setAddress(doc.child("address").getValue(String.class));
+        post.setOwnerID(doc.child("ownerID").getValue(String.class));
+
+        List<String> imageIDs = new ArrayList<>();
+        for (DataSnapshot c : doc.child("images").getChildren()) {
+            imageIDs.add(c.getValue(String.class));
+        }
+        post.setImageIDs(imageIDs);
+
+        post.setLatitude(doc.child("coords/lat").getValue(Double.class));
+        post.setLongitude(doc.child("coords/lng").getValue(Double.class));
+        return post;
+    }
 
     public String getPostID() {
         return postID;
