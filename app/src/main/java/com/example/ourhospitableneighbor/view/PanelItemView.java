@@ -15,12 +15,16 @@ import com.example.ourhospitableneighbor.model.Job;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class PanelItemView extends LinearLayout {
-    private TextView title;
-    private TextView address;
-    private TextView distance;
-    private ImageView image;
+import java.text.DecimalFormat;
 
+public class PanelItemView extends LinearLayout {
+    private TextView txtTitle;
+    private TextView txtAddress;
+    private TextView txtDistance;
+    private ImageView imgThumb;
+    private Job job;
+
+    private static DecimalFormat fmt = new DecimalFormat();
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     public PanelItemView(Context context) {
@@ -42,10 +46,10 @@ public class PanelItemView extends LinearLayout {
         // Populate with views from the layout file
         inflate(getContext(), R.layout.panel_item, this);
 
-        title = findViewById(R.id.txt_title);
-        address = findViewById(R.id.txt_address);
-        distance = findViewById(R.id.txt_distance);
-        image = findViewById(R.id.imageView);
+        txtTitle = findViewById(R.id.txt_title);
+        txtAddress = findViewById(R.id.txt_address);
+        txtDistance = findViewById(R.id.txt_distance);
+        imgThumb = findViewById(R.id.imageView);
 
         setOrientation(LinearLayout.VERTICAL);
         setFocusable(true);
@@ -58,12 +62,28 @@ public class PanelItemView extends LinearLayout {
     }
 
     public void setJob(Job job) {
-        title.setText(job.getJobTitle());
-        address.setText(job.getAddress());
+        this.job = job;
+        txtTitle.setText(job.getJobTitle());
+        txtAddress.setText(job.getAddress());
 
+        setThumbnailImage();
+        setDistanceText();
+    }
+
+    private void setThumbnailImage() {
         String thumbnail = job.getThumbnail();
         if (thumbnail != null) {
-            Glide.with(getContext()).load(storageReference.child(thumbnail)).into(image);
+            Glide.with(getContext()).load(storageReference.child(thumbnail)).into(imgThumb);
+        }
+
+    }
+
+    private void setDistanceText() {
+        Float distance = job.getDistanceFromUserLocation();
+        if (distance == null) {
+            txtDistance.setText(null);
+        } else {
+            txtDistance.setText(fmt.format(Math.round(distance)) + "m away");
         }
     }
 }

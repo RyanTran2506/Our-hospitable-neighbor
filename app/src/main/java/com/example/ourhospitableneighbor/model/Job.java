@@ -1,5 +1,7 @@
 package com.example.ourhospitableneighbor.model;
 
+import android.location.Location;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Job {
     private int expectedHrs;    //How long to finish the job
     private double rate;    //rate per hrs
     private double totalPay;    //Total payment amt
+    private Float distanceFromUserLocation;
 
     public String getJobID() {
         return jobID;
@@ -127,5 +130,20 @@ public class Job {
 
     public void setTotalPay(double totalPay) {
         this.totalPay = totalPay;
+    }
+
+    public void setUserCurrentLocation(Location location) {
+        if (location == null) return;
+        distanceFromUserLocation = getDistanceFromLocation(location);
+    }
+
+    public Float getDistanceFromUserLocation() {
+        return this.distanceFromUserLocation;
+    }
+
+    private float getDistanceFromLocation(Location location) {
+        float[] result = new float[1];
+        Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.getLatitude(), this.getLongitude(), result);
+        return result[0];
     }
 }

@@ -6,6 +6,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -13,14 +15,17 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.example.ourhospitableneighbor.ListJobInAreaActivity;
 import com.example.ourhospitableneighbor.R;
 import com.example.ourhospitableneighbor.model.Job;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PanelView extends LinearLayout {
@@ -132,14 +137,22 @@ public class PanelView extends LinearLayout {
     @SuppressLint("ClickableViewAccessibility")
     private void configurePanel() {
         panel = this;
+        panel.setOnTouchListener(this::onPanelTouch);
+
         panelItemsContainer = findViewById(R.id.panel_item_container);
+
         panelHeader = this.findViewById(R.id.panel_header);
         panelHeader.setOnClickListener(v -> {
             toggleCollapse();
             snap(true);
         });
-        panel.setOnTouchListener(this::onPanelTouch);
+
         snap(false);
+
+        Button viewAllButton = findViewById(R.id.btn_view_all);
+        viewAllButton.setOnClickListener(v -> {
+            getContext().startActivity(new Intent(this.getContext(), ListJobInAreaActivity.class));
+        });
     }
 
     private void toggleCollapse() {
@@ -180,10 +193,9 @@ public class PanelView extends LinearLayout {
         }
     }
 
-
     public void snap(boolean shouldAnimate) {
         if (shouldAnimate && itemsContainerAnimator == null) {
-            panel.measure(0, 0);
+            panel.measure(getWidth(), 0);
             float headerHeight = getPanelHeaderHeight();
             float panelHeight = getPanelHeight();
             float target = isCollapsed ? (panelHeight - headerHeight) : 0;
@@ -202,7 +214,7 @@ public class PanelView extends LinearLayout {
         } else {
             stopItemsContainerSnapAnimation();
 
-            panel.measure(0, 0);
+            panel.measure(getWidth(), 0);
             float headerHeight = getPanelHeaderHeight();
             float panelHeight = getPanelHeight();
             float target = isCollapsed ? (panelHeight - headerHeight) : 0;

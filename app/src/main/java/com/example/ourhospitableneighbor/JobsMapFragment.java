@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ourhospitableneighbor.model.Job;
 import com.example.ourhospitableneighbor.view.PanelView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,10 +32,13 @@ import java.util.concurrent.TimeUnit;
 public class JobsMapFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
-    private GoogleMap map;
     private SupportMapFragment mapFragment;
+    private GoogleMap map;
     private PanelView panel;
+
     private Debouncer showJobsDebouncer = new Debouncer();
+    private FusedLocationProviderClient locationClient;
+
     private boolean loadingJobsFirstTime = true;
 
     @Override
@@ -41,6 +46,7 @@ public class JobsMapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_jobs_map, container, false);
         panel = rootView.findViewById(R.id.panel);
+        locationClient = LocationServices.getFusedLocationProviderClient(getContext());
         addMapFragment();
         return rootView;
     }
@@ -64,6 +70,10 @@ public class JobsMapFragment extends Fragment {
         assert ctx != null;
 
         if (ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationClient.getLastLocation().addOnSuccessListener(location -> {
+                JobService.getInstance().setUserCurrentLocation(location);
+                showJobsInAreaDebounced();
+            });
             setUpMyLocationButton();
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -127,6 +137,7 @@ public class JobsMapFragment extends Fragment {
         showJobsDebouncer.debounce(this::showJobsInArea, 200, TimeUnit.MILLISECONDS);
     }
 
+    @SuppressLint("MissingPermission")
     private void showJobsInArea() {
         getActivity().runOnUiThread(() -> {
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;

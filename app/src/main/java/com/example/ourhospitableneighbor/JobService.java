@@ -1,5 +1,7 @@
 package com.example.ourhospitableneighbor;
 
+import android.location.Location;
+
 import com.example.ourhospitableneighbor.model.Job;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.Task;
@@ -10,13 +12,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class JobService {
     private static JobService instance;
-    private CollectionReference collection;
+    private CollectionReference collection; // firebase storage
+    private Location userCurrentLocation;
     private List<Job> jobs;
+    private List<Job> lastJobsInAreaResult;
     private Task<List<Job>> getAllJobsTask;
 
     public static JobService getInstance() {
@@ -55,11 +60,25 @@ public class JobService {
                 double lng = job.getLongitude();
                 if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
                     jobsInArea.add(job);
+                    job.setUserCurrentLocation(userCurrentLocation);
                 }
             }
 
-            return jobsInArea;
+            // Have to do this check else the sort function will never complete
+            if (userCurrentLocation != null) {
+                Collections.sort(jobsInArea, (o1, o2) -> Float.compare(o1.getDistanceFromUserLocation(), o2.getDistanceFromUserLocation()));
+            }
+
+            return lastJobsInAreaResult = jobsInArea;
         });
+    }
+
+    public List<Job> getLastJobsInAreaResult() {
+        return lastJobsInAreaResult;
+    }
+
+    public void setUserCurrentLocation(Location location) {
+        this.userCurrentLocation = location;
     }
 
     private Job mapDocumentToJob(DocumentSnapshot doc) {
