@@ -4,27 +4,27 @@
     <string name="navigation_drawer_close">Close side menu</string>
     <string name="log_out">Log out</string>
     <string name="view_all">View All</string>
-    <plurals name="number_of_job_found">
-        <item quantity="zero">No job in this area</item>
-        <item quantity="one">1 job in this area</item>
-        <item quantity="other">%d jobs in this area</item>
+    <plurals name="number_of_post_found">
+        <item quantity="zero">No post in this area</item>
+        <item quantity="one">1 post in this area</item>
+        <item quantity="other">%d posts in this area</item>
     </plurals>
 
-    <!--These string are for post-a-job activity-->
-    <string name="postNewJob">Post A New Job</string>
+    <!--These string are for post-a-post activity-->
+    <string name="createNewPost">Create A New Post</string>
     <string name="btnPost">Post</string>
-    <string name="edtJobName">Job Name</string>
-    <string name="edtJobAddress">Address</string>
-    <string name="edtJobPostalCode">Postal Code</string>
-    <string name="txtJobPayment">Payment:</string>
+    <string name="edtPostName">Post Name</string>
+    <string name="edtPostAddress">Address</string>
+    <string name="edtPostPostalCode">Postal Code</string>
+    <string name="txtPostPayment">Payment:</string>
     <string-array name="grpPayments">
         <item>By working hours</item>
-        <item>Finish the whole job</item>
+        <item>Finish the whole post</item>
     </string-array>
     <string name="txtPaymentRateName">/Hrs</string>
 
-    <!--These string are for job-detail activity-->
-    <string name="jobDetailTitle">Job Detail</string>
-    <string name="btnAcceptJob">Accept this Job</string>
+    <!--These string are for post-detail activity-->
+    <string name="postDetailTitle">Post Detail</string>
+    <string name="btnAcceptPost">Accept this Post</string>
     <string name="btnBack">Back</string>
 </resources>

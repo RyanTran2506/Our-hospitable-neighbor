@@ -1,5 +1,6 @@
 package com.example.ourhospitableneighbor.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -11,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
-import com.example.ourhospitableneighbor.model.Job;
+import com.example.ourhospitableneighbor.model.Post;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -22,9 +23,9 @@ public class PanelItemView extends LinearLayout {
     private TextView txtAddress;
     private TextView txtDistance;
     private ImageView imgThumb;
-    private Job job;
+    private Post post;
 
-    private static DecimalFormat fmt = new DecimalFormat();
+    private static DecimalFormat fmt = new DecimalFormat("###,###.##");
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images");
 
     public PanelItemView(Context context) {
@@ -61,29 +62,35 @@ public class PanelItemView extends LinearLayout {
         setBackgroundResource(outValue.resourceId);
     }
 
-    public void setJob(Job job) {
-        this.job = job;
-        txtTitle.setText(job.getJobTitle());
-        txtAddress.setText(job.getAddress());
+    public void setPost(Post post) {
+        this.post = post;
+        txtTitle.setText(post.getPostTitle());
+        txtAddress.setText(post.getAddress());
 
         setThumbnailImage();
         setDistanceText();
     }
 
     private void setThumbnailImage() {
-        String thumbnail = job.getThumbnail();
+        String thumbnail = post.getThumbnail();
         if (thumbnail != null) {
             Glide.with(getContext()).load(storageReference.child(thumbnail)).into(imgThumb);
         }
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void setDistanceText() {
-        Float distance = job.getDistanceFromUserLocation();
+        Float distance = post.getDistanceFromUserLocation();
         if (distance == null) {
             txtDistance.setText(null);
         } else {
-            txtDistance.setText(fmt.format(Math.round(distance)) + "m away");
+            int distanceRounded = Math.round(distance);
+            if (distanceRounded >= 1000) {
+                txtDistance.setText(fmt.format( distanceRounded / 1000f) + "km away");
+            } else {
+                txtDistance.setText(fmt.format(distanceRounded) + "m away");
+            }
         }
     }
 }

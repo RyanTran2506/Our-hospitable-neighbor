@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostJob">
+    tools:context=".CreatePostActivity">
 
     <EditText
-        android:id="@+id/txtJobName"
+        android:id="@+id/txtPostName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -18,14 +18,14 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="@string/edtJobName"
+        android:text="@string/edtPostName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/txtJobAddress"
+        android:id="@+id/txtPostAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -36,13 +36,13 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="@string/edtJobAddress"
+        android:text="@string/edtPostAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtJobName" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPostName" />
 
     <EditText
-        android:id="@+id/edtJobPostalCode"
+        android:id="@+id/edtPostPostalCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -53,13 +53,13 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="@string/edtJobPostalCode"
+        android:text="@string/edtPostPostalCode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtJobAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPostAddress" />
 
     <Button
-        android:id="@+id/btnPostJob"
+        android:id="@+id/btnPostPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/postNewJob"
+        android:text="@string/createNewPost"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
         android:layout_marginRight="32dp"
         android:entries="@array/grpPayments"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtJobPostalCode" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPostPostalCode" />
 
     <TextView
         android:id="@+id/textView2"
@@ -97,12 +97,12 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="24dp"
-        android:text="@string/txtJobPayment"
+        android:text="@string/txtPostPayment"
         android:textSize="30sp"
         app:layout_constraintEnd_toStartOf="@+id/spnPaymentType"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtJobPostalCode" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPostPostalCode" />
 
     <EditText
         android:id="@+id/edtRate"

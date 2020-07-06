@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -21,11 +20,10 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.example.ourhospitableneighbor.ListJobInAreaActivity;
+import com.example.ourhospitableneighbor.ListPostInAreaActivity;
 import com.example.ourhospitableneighbor.R;
-import com.example.ourhospitableneighbor.model.Job;
+import com.example.ourhospitableneighbor.model.Post;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PanelView extends LinearLayout {
@@ -98,18 +96,18 @@ public class PanelView extends LinearLayout {
         return false;
     }
 
-    public void setJobs(List<Job> jobs) {
-        findViewById(R.id.progress_job_count).setVisibility(INVISIBLE);
+    public void setPosts(List<Post> posts) {
+        findViewById(R.id.progress_post_count).setVisibility(INVISIBLE);
 
-        TextView txtJobCount = findViewById(R.id.txt_job_count);
-        txtJobCount.setVisibility(VISIBLE);
-        txtJobCount.setText(getResources().getQuantityString(R.plurals.number_of_job_found, jobs.size(), jobs.size()));
+        TextView txtPostCount = findViewById(R.id.txt_post_count);
+        txtPostCount.setVisibility(VISIBLE);
+        txtPostCount.setText(getResources().getQuantityString(R.plurals.number_of_post_found, posts.size(), posts.size()));
 
         panelItemsContainer.removeAllViews();
-        for (int i = 0; i < jobs.size() && i < 3; i++) {
-            Job job = jobs.get(i);
+        for (int i = 0; i < posts.size() && i < 3; i++) {
+            Post post = posts.get(i);
             PanelItemView item = new PanelItemView(getContext());
-            item.setJob(job);
+            item.setPost(post);
             panelItemsContainer.addView(item);
         }
 
@@ -151,7 +149,7 @@ public class PanelView extends LinearLayout {
 
         Button viewAllButton = findViewById(R.id.btn_view_all);
         viewAllButton.setOnClickListener(v -> {
-            getContext().startActivity(new Intent(this.getContext(), ListJobInAreaActivity.class));
+            getContext().startActivity(new Intent(this.getContext(), ListPostInAreaActivity.class));
         });
     }
 

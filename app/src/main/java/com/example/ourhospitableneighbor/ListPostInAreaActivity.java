@@ -9,25 +9,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ourhospitableneighbor.model.Job;
+import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.view.PanelItemView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class ListJobInAreaActivity extends AppCompatActivity {
-    private List<Job> jobs;
+public class ListPostInAreaActivity extends AppCompatActivity {
+    private List<Post> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_job_in_area);
+        setContentView(R.layout.activity_list_post_in_area);
 
-        jobs = JobService.getInstance().getLastJobsInAreaResult();
-        if (jobs == null) jobs = new ArrayList<>();
+        posts = PostService.getInstance().getLastPostsInAreaResult();
+        if (posts == null) posts = new ArrayList<>();
 
-        RecyclerView recyclerView = findViewById(R.id.listJobInAreaActivity_RecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.listPostInAreaActivity_RecyclerView);
         recyclerView.setAdapter(new Adapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -41,21 +40,21 @@ public class ListJobInAreaActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.jobItemView.setJob(jobs.get(position));
+            holder.postItemView.setPost(posts.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return jobs.size();
+            return posts.size();
         }
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
-        private PanelItemView jobItemView;
+        private PanelItemView postItemView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.jobItemView = (PanelItemView) itemView;
+            this.postItemView = (PanelItemView) itemView;
         }
     }
 }

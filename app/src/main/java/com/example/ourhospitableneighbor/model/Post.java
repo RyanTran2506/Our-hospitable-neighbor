@@ -5,43 +5,43 @@ import android.location.Location;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Job {
-    private String jobID;
-    private String jobTitle;
-    private JobStatus status;
+public class Post {
+    private String postID;
+    private String postTitle;
+    private PostStatus status;
     private String address;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String ownerID;
     private LocalDate date;
     private List<String> imageIDs;
-    private int paymentType;  //assume that payPerHour(type = 0), payPerFinishJob(type = 1)
-    private int expectedHrs;    //How long to finish the job
+    private int paymentType;  //assume that payPerHour(type = 0), payPerFinishPost(type = 1)
+    private int expectedHrs;    //How long to finish the post
     private double rate;    //rate per hrs
     private double totalPay;    //Total payment amt
     private Float distanceFromUserLocation;
 
-    public String getJobID() {
-        return jobID;
+    public String getPostID() {
+        return postID;
     }
 
-    public void setJobID(String jobID) {
-        this.jobID = jobID;
+    public void setPostID(String postID) {
+        this.postID = postID;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public String getPostTitle() {
+        return postTitle;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
-    public JobStatus getStatus() {
+    public PostStatus getStatus() {
         return status;
     }
 
-    public void setStatus(JobStatus status) {
+    public void setStatus(PostStatus status) {
         this.status = status;
     }
 
@@ -54,19 +54,19 @@ public class Job {
     }
 
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
