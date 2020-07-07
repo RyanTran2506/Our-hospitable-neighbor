@@ -7,12 +7,10 @@
         android:protectionLevel="normal" />
 
     <uses-permission android:name="com.google.maps.android.utils.permission.MAPS_RECEIVE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -27,11 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Detail" />
+        <activity android:name=".JobDetail" />
         <activity android:name=".History" />
         <activity android:name=".PostJob" />
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppThemeNoActionBar">

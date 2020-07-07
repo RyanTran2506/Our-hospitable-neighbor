@@ -6,8 +6,8 @@ import java.util.List;
 public class Job {
     private String jobID;
     private String jobTitle;
-    private JobStatus status;
     private String address;
+    private JobStatus status;
     private double latitude;
     private double longitude;
     private String ownerID;
@@ -17,6 +17,13 @@ public class Job {
     private int expectedHrs;    //How long to finish the job
     private double rate;    //rate per hrs
     private double totalPay;    //Total payment amt
+
+    public Job(){
+
+    }
+    public Job(String jobTitle, String address, JobStatus status, String owerID, List<String> imageIDs){
+
+    }
 
     public String getJobID() {
         return jobID;
