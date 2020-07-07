@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ourhospitableneighbor.model.Job;
+import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.view.PanelView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,19 +29,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.concurrent.TimeUnit;
 
-public class JobsMapFragment extends Fragment {
+public class PostsMapFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
-    private GoogleMap map;
     private SupportMapFragment mapFragment;
+    private GoogleMap map;
     private PanelView panel;
-    private Debouncer showJobsDebouncer = new Debouncer();
+
+    private Debouncer showPostsDebouncer = new Debouncer();
+    private FusedLocationProviderClient locationClient;
+
+    private boolean loadingPostsFirstTime = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_jobs_map, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_posts_map, container, false);
         panel = rootView.findViewById(R.id.panel);
+        locationClient = LocationServices.getFusedLocationProviderClient(getContext());
         addMapFragment();
         return rootView;
     }
@@ -63,18 +70,22 @@ public class JobsMapFragment extends Fragment {
         assert ctx != null;
 
         if (ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationClient.getLastLocation().addOnSuccessListener(location -> {
+                PostService.getInstance().setUserCurrentLocation(location);
+                showPostsInAreaDebounced();
+            });
             setUpMyLocationButton();
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
-        map.setOnCameraIdleListener(this::showJobsInAreaDebounced);
+        map.setOnCameraIdleListener(this::showPostsInAreaDebounced);
         map.getUiSettings().setMapToolbarEnabled(false);
 
         setUpCompassButton();
         setInitialViewPoint();
-        showAllJobMarkers();
+        showAllPostMarkers();
     }
 
     private void setInitialViewPoint() {
@@ -122,33 +133,38 @@ public class JobsMapFragment extends Fragment {
         rlp.setMargins(0, 0, 0, 30);
     }
 
-    private void showJobsInAreaDebounced() {
-        showJobsDebouncer.debounce(this::showJobsInArea, 200, TimeUnit.MILLISECONDS);
+    private void showPostsInAreaDebounced() {
+        showPostsDebouncer.debounce(this::showPostsInArea, 200, TimeUnit.MILLISECONDS);
     }
 
-    private void showJobsInArea() {
+    @SuppressLint("MissingPermission")
+    private void showPostsInArea() {
         getActivity().runOnUiThread(() -> {
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            AsyncTask.execute(() -> {
-                JobService.getInstance().getJobsInArea(bounds).addOnSuccessListener(jobs -> {
-                    panel.setJobs(jobs);
+            PostService.getInstance().getPostsInArea(bounds, posts -> {
+                getActivity().runOnUiThread(() -> {
+                    panel.setPosts(posts);
+                    if (loadingPostsFirstTime) {
+                        panel.setCollapse(false, true);
+                        loadingPostsFirstTime = false;
+                    }
                 });
             });
         });
     }
 
-    private void showAllJobMarkers() {
-        JobService.getInstance().getAllJobs().addOnSuccessListener(jobs -> {
+    private void showAllPostMarkers() {
+        PostService.getInstance().getAllPosts(posts -> {
             map.clear();
-            for (Job job : jobs) {
-                map.addMarker(createMarkerFromJob(job));
+            for (Post post : posts) {
+                map.addMarker(createMarkerFromPost(post));
             }
         });
     }
 
-    private MarkerOptions createMarkerFromJob(Job job) {
+    private MarkerOptions createMarkerFromPost(Post post) {
         return new MarkerOptions()
-                .position(new LatLng(job.getLatitude(), job.getLongitude()))
-                .title(job.getJobTitle());
+                .position(new LatLng(post.getLatitude(), post.getLongitude()))
+                .title(post.getPostTitle());
     }
 }

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickCreatePost() {
-        Intent intent = new Intent(this, PostJob.class);
+        Intent intent = new Intent(this, CreatePostActivity.class);
         startActivity(intent);
     }
 

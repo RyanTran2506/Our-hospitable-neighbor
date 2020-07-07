@@ -11,15 +11,15 @@ import android.widget.Toast;
 
 public class History extends ListActivity {
 
-    String[] jobHistoryList;
+    String[] postHistoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String[] tempJobs = {"job 1" , "job 2"};
+        String[] tempPosts = {"post 1" , "post 2"};
 
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_history, R.id.jobHistoryList, tempJobs));
+        setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_history, R.id.postHistoryList, tempPosts));
     }
 
     @Override

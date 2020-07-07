@@ -7,7 +7,7 @@
     tools:context=".JobDetail">
 
     <TextView
-        android:id="@+id/edtJobName"
+        android:id="@+id/txtPostName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/edtJobAddress"
+        android:id="@+id/txtPostAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -37,10 +37,10 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPostName" />
 
     <TextView
-        android:id="@+id/txtJobPostalCode"
+        android:id="@+id/txtPostPostalCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -53,14 +53,14 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPostAddress" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/jobDetailTitle"
+        android:text="@string/postDetailTitle"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobPostalCode" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPostPostalCode" />
 
     <TextView
         android:id="@+id/textView2"
@@ -82,22 +82,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/txtJobPayment"
+        android:layout_marginTop="220dp"
+        android:text="@string/txtPostPayment"
         android:textSize="30sp"
-        app:layout_constraintEnd_toStartOf="@+id/spnPaymentType"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtJobPostalCode" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPostPostalCode" />
 
     <Button
-        android:id="@+id/btnAcceptJob"
+        android:id="@+id/btnAcceptPost"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginLeft="48dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/btnAcceptJob"
+        android:text="@string/btnAcceptPost"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -112,6 +111,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnAcceptJob" />
+        app:layout_constraintStart_toEndOf="@+id/btnAcceptPost" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

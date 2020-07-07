@@ -1,4 +1,4 @@
 package com.example.ourhospitableneighbor.model;
 
-public enum JobStatus {
+public enum PostStatus {
 }
