@@ -2,10 +2,11 @@ package com.example.ourhospitableneighbor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.ourhospitableneighbor.helper.Debouncer;
 import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.view.PanelView;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class PostsMapFragment extends Fragment {
@@ -46,7 +49,7 @@ public class PostsMapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_posts_map, container, false);
         panel = rootView.findViewById(R.id.panel);
-        locationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        locationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
         addMapFragment();
         return rootView;
     }
@@ -111,11 +114,21 @@ public class PostsMapFragment extends Fragment {
         View locationButton = mapView.findViewWithTag("GoogleMapMyLocationButton");
         if (locationButton == null) return;
 
-        // position on right bottom
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 0, 30);
+        View toolbar = getToolbar();
+        if (toolbar == null) return;
+
+        // Convert dp to px
+        int padding = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                10,
+                getResources().getDisplayMetrics())
+        );
+        toolbar.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                    rlp.setMargins(0, bottom + padding, 0, 0);
+                    locationButton.setLayoutParams(rlp);
+                }
+        );
     }
 
     private void setUpCompassButton() {
@@ -125,12 +138,21 @@ public class PostsMapFragment extends Fragment {
         View compassButton = mapView.findViewWithTag("GoogleMapCompass");
         if (compassButton == null) return;
 
-        // position on left bottom
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
+        View toolbar = getToolbar();
+        if (toolbar == null) return;
 
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 0, 30);
+        // Convert dp to px
+        int padding = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                10,
+                getResources().getDisplayMetrics())
+        );
+        toolbar.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
+                    rlp.setMargins(0, bottom + padding, 0, 0);
+                    compassButton.setLayoutParams(rlp);
+                }
+        );
     }
 
     private void showPostsInAreaDebounced() {
@@ -139,22 +161,20 @@ public class PostsMapFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     private void showPostsInArea() {
-        getActivity().runOnUiThread(() -> {
+        Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            PostService.getInstance().getPostsInArea(bounds, posts -> {
-                getActivity().runOnUiThread(() -> {
-                    panel.setPosts(posts);
-                    if (loadingPostsFirstTime) {
-                        panel.setCollapse(false, true);
-                        loadingPostsFirstTime = false;
-                    }
-                });
-            });
+            PostService.getInstance().getPostsInArea(bounds).thenAccept(posts -> getActivity().runOnUiThread(() -> {
+                panel.setPosts(posts);
+                if (loadingPostsFirstTime) {
+                    panel.setCollapse(false, true);
+                    loadingPostsFirstTime = false;
+                }
+            }));
         });
     }
 
     private void showAllPostMarkers() {
-        PostService.getInstance().getAllPosts(posts -> {
+        PostService.getInstance().getAllPosts().thenAccept(posts -> {
             map.clear();
             for (Post post : posts) {
                 map.addMarker(createMarkerFromPost(post));
@@ -166,5 +186,11 @@ public class PostsMapFragment extends Fragment {
         return new MarkerOptions()
                 .position(new LatLng(post.getLatitude(), post.getLongitude()))
                 .title(post.getPostTitle());
+    }
+
+    private View getToolbar() {
+        Activity activity = getActivity();
+        if (activity == null) return null;
+        return activity.findViewById(R.id.toolbar_main);
     }
 }

@@ -3,7 +3,6 @@ package com.example.ourhospitableneighbor;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Consumer;
 
 import com.example.ourhospitableneighbor.model.Post;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -17,12 +16,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import java9.util.concurrent.CompletableFuture;
+
 public class PostService {
     private static PostService instance;
     private DatabaseReference collection; // firebase storage
     private Location userCurrentLocation;
     private List<Post> posts;
     private List<Post> lastPostsInAreaResult;
+
+    private CompletableFuture<List<Post>> getAllPostsFuture;
 
     public static PostService getInstance() {
         if (instance == null) instance = new PostService();
@@ -33,12 +36,12 @@ public class PostService {
         collection = FirebaseDatabase.getInstance().getReference("posts");
     }
 
-    public void getAllPosts(Consumer<List<Post>> onSuccess) {
-        if (posts != null) {
-            onSuccess.accept(posts);
-            return;
+    public CompletableFuture<List<Post>> getAllPosts() {
+        if (getAllPostsFuture != null) {
+            return getAllPostsFuture;
         }
 
+        getAllPostsFuture = new CompletableFuture();
         collection.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -46,19 +49,19 @@ public class PostService {
                 for (DataSnapshot child : snapshot.getChildren()) {
                     posts.add(Post.fromFirebaseSnapshot(child));
                 }
-                onSuccess.accept(posts);
+                getAllPostsFuture.complete(posts);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+        return getAllPostsFuture;
     }
 
 
-    public void getPostsInArea(LatLngBounds area, Consumer<List<Post>> onSuccess) {
-        getAllPosts(allPosts -> {
+    public CompletableFuture<List<Post>> getPostsInArea(LatLngBounds area) {
+        return getAllPosts().thenApplyAsync(allPosts -> {
             List<Post> postsInArea = new ArrayList<>();
 
             for (Post post : allPosts) {
@@ -76,7 +79,7 @@ public class PostService {
             }
 
             lastPostsInAreaResult = postsInArea;
-            onSuccess.accept(postsInArea);
+            return postsInArea;
         });
     }
 
