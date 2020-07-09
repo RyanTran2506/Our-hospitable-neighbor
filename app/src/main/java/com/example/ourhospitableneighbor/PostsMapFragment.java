@@ -18,7 +18,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ourhospitableneighbor.helper.Debouncer;
 import com.example.ourhospitableneighbor.model.Post;
+import com.example.ourhospitableneighbor.model.PostClusterItem;
 import com.example.ourhospitableneighbor.view.PanelView;
+import com.example.ourhospitableneighbor.view.PostInfoWindowView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,7 +29,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -44,6 +48,7 @@ public class PostsMapFragment extends Fragment {
     private Debouncer showPostsDebouncer = new Debouncer();
     private FusedLocationProviderClient locationClient;
     private PostService postService = PostService.getInstance();
+    private ClusterManager<PostClusterItem> clusterManager;
 
     private Disposable allJobsDisposable;
     private Disposable jobsInAreaDisposable;
@@ -91,15 +96,6 @@ public class PostsMapFragment extends Fragment {
     private void onMapReady(GoogleMap map) {
         this.map = map;
 
-        if (allJobsDisposable != null) allJobsDisposable.dispose();
-        allJobsDisposable = postService.getAllPostsObservable().subscribe(posts -> {
-            map.clear();
-            for (Post post : posts) {
-                MarkerOptions options = createMarkerFromPost(post);
-                if (options != null) map.addMarker(options);
-            }
-        });
-
         Context ctx = this.getActivity();
         assert ctx != null;
 
@@ -111,7 +107,48 @@ public class PostsMapFragment extends Fragment {
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
-        map.setOnCameraIdleListener(this::updateAreaDebounced);
+        // Configure cluster manager
+        clusterManager = new ClusterManager<>(ctx, map);
+        clusterManager.setRenderer(new DefaultClusterRenderer<PostClusterItem>(ctx, map, clusterManager) {
+            @Override
+            protected void onClusterItemRendered(@NonNull PostClusterItem clusterItem, @NonNull Marker marker) {
+                super.onClusterItemRendered(clusterItem, marker);
+                marker.setTag(clusterItem.getPost());
+            }
+        });
+        clusterManager.getMarkerCollection().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                PostInfoWindowView v = new PostInfoWindowView(ctx);
+                Post p = (Post) marker.getTag();
+                if (p == null) return null;
+                v.setPost(p);
+                return v;
+            }
+        });
+
+        map.setOnCameraIdleListener(() -> {
+            this.updateAreaDebounced();
+            clusterManager.onCameraIdle();
+        });
+        map.setOnMarkerClickListener(clusterManager);
+
+        if (allJobsDisposable != null) allJobsDisposable.dispose();
+        allJobsDisposable = postService.getAllPostsObservable().subscribe(posts -> {
+            clusterManager.clearItems();
+            for (Post post : posts) {
+                PostClusterItem options = createMarkerFromPost(post);
+                if (options != null) clusterManager.addItem(options);
+                clusterManager.cluster();
+            }
+        });
+        // End configure cluster manager
+
         map.getUiSettings().setMapToolbarEnabled(false);
 
         setUpCompassButton();
@@ -213,15 +250,12 @@ public class PostsMapFragment extends Fragment {
         postService.getAllPosts();
     }
 
-    private MarkerOptions createMarkerFromPost(Post post) {
+    private PostClusterItem createMarkerFromPost(Post post) {
         Double lat = post.getLatitude();
         Double lng = post.getLongitude();
         if (lat == null || lng == null) return null;
 
-        LatLng pos = new LatLng(post.getLatitude(), post.getLongitude());
-        return new MarkerOptions()
-                .position(pos)
-                .title(post.getPostTitle());
+        return new PostClusterItem(post);
     }
 
     private View getToolbar() {

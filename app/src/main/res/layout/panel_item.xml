@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/PanelItemView_ConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="15dp"
@@ -63,6 +64,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+        android:id="@+id/PanelItemView_Separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/separator" />
