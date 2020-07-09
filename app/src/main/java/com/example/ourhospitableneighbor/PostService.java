@@ -3,9 +3,11 @@ package com.example.ourhospitableneighbor;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.ourhospitableneighbor.model.Post;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,16 +16,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import java9.util.concurrent.CompletableFuture;
+import java9.util.Optional;
 
 public class PostService {
     private static PostService instance;
     private DatabaseReference collection; // firebase storage
-    private Location userCurrentLocation;
-    private List<Post> posts;
-    private List<Post> lastPostsInAreaResult;
+    private List<Post> posts = new ArrayList<>();
+    private Map<String, Post> postsByID = new HashMap<>();
+
+    private final BehaviorSubject<List<Post>> allPostsSubject = BehaviorSubject.create();
+    private final BehaviorSubject<List<Post>> postsInAreaSubject = BehaviorSubject.create();
+    private final BehaviorSubject<LatLngBounds> areaSubject = BehaviorSubject.create();
+    // Location might be null, but RxJava doesn't like null so we must wrap it with Optional
+    private final BehaviorSubject<Optional<Location>> currentLocationSubject = BehaviorSubject.createDefault(Optional.empty());
 
     private CompletableFuture<List<Post>> getAllPostsFuture;
 
@@ -34,6 +47,26 @@ public class PostService {
 
     private PostService() {
         collection = FirebaseDatabase.getInstance().getReference("posts");
+
+        Observable.combineLatest(allPostsSubject, areaSubject, currentLocationSubject, (posts, area, location) -> {
+            List<Post> postsInArea = new ArrayList<>();
+            for (Post post : posts) {
+                Double lat = post.getLatitude();
+                Double lng = post.getLongitude();
+                if (lat == null || lng == null) continue;
+                if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
+                    postsInArea.add(post);
+                    post.setUserCurrentLocation(location.orElse(null));
+                }
+            }
+
+            // Have to do this check else the sort function will never complete
+            if (location.isPresent()) {
+                Collections.sort(postsInArea, (o1, o2) -> Float.compare(o1.getDistanceFromUserLocation(), o2.getDistanceFromUserLocation()));
+            }
+
+            return postsInArea;
+        }).subscribe(postsInAreaSubject);
     }
 
     public CompletableFuture<List<Post>> getAllPosts() {
@@ -41,15 +74,23 @@ public class PostService {
             return getAllPostsFuture;
         }
 
-        getAllPostsFuture = new CompletableFuture();
+        getAllPostsFuture = new CompletableFuture<>();
         collection.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                posts = new ArrayList<>();
+                posts.clear();
+                postsByID.clear();
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    posts.add(Post.fromFirebaseSnapshot(child));
+                    if (postsByID.containsKey(snapshot.getKey())) continue;
+                    Post p = Post.fromFirebaseSnapshot(child);
+                    posts.add(p);
+                    postsByID.put(p.getPostID(), p);
                 }
                 getAllPostsFuture.complete(posts);
+
+                collection.removeEventListener(firebaseChildEventListener);
+                allPostsSubject.onNext(posts);
+                collection.addChildEventListener(firebaseChildEventListener);
             }
 
             @Override
@@ -59,35 +100,76 @@ public class PostService {
         return getAllPostsFuture;
     }
 
+    /**
+     * This observable emits a new event asynchronously after the method {@link #getAllPosts} is called
+     */
+    public Observable<List<Post>> getAllPostsObservable() {
+        return allPostsSubject;
+    }
 
-    public CompletableFuture<List<Post>> getPostsInArea(LatLngBounds area) {
-        return getAllPosts().thenApplyAsync(allPosts -> {
-            List<Post> postsInArea = new ArrayList<>();
-
-            for (Post post : allPosts) {
-                double lat = post.getLatitude();
-                double lng = post.getLongitude();
-                if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
-                    postsInArea.add(post);
-                    post.setUserCurrentLocation(userCurrentLocation);
-                }
-            }
-
-            // Have to do this check else the sort function will never complete
-            if (userCurrentLocation != null) {
-                Collections.sort(postsInArea, (o1, o2) -> Float.compare(o1.getDistanceFromUserLocation(), o2.getDistanceFromUserLocation()));
-            }
-
-            lastPostsInAreaResult = postsInArea;
-            return postsInArea;
-        });
+    /**
+     * This observable emits a new event whenever the camera's area or the user location change.
+     * To change the area, call the {@link #setArea} method.
+     * To change the user's current location, call the {@link #setUserCurrentLocation} method
+     */
+    public Observable<List<Post>> getPostInAreaObservable() {
+        return postsInAreaSubject;
     }
 
     public List<Post> getLastPostsInAreaResult() {
-        return lastPostsInAreaResult;
+        return postsInAreaSubject.getValue();
+    }
+
+    public void setArea(LatLngBounds area) {
+        areaSubject.onNext(area);
     }
 
     public void setUserCurrentLocation(Location location) {
-        this.userCurrentLocation = location;
+        currentLocationSubject.onNext(Optional.of(location));
     }
+
+    private final ChildEventListener firebaseChildEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            if (postsByID.containsKey(snapshot.getKey())) return;
+            Post p = Post.fromFirebaseSnapshot(snapshot);
+            posts.add(p);
+            postsByID.put(p.getPostID(), p);
+            allPostsSubject.onNext(posts);
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            Post p = Post.fromFirebaseSnapshot(snapshot);
+            String id = p.getPostID();
+            if (postsByID.containsKey(id)) {
+                Objects.requireNonNull(postsByID.get(id)).updateWithPost(p);
+                allPostsSubject.onNext(posts);
+            }
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            String id = snapshot.getKey();
+            if (postsByID.containsKey(id)) {
+                postsByID.remove(id);
+
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getPostID().equals(id)) {
+                        posts.remove(i);
+                        allPostsSubject.onNext(posts);
+                        return;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+        }
+    };
 }

@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+
 public class PostsMapFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -41,6 +43,10 @@ public class PostsMapFragment extends Fragment {
 
     private Debouncer showPostsDebouncer = new Debouncer();
     private FusedLocationProviderClient locationClient;
+    private PostService postService = PostService.getInstance();
+
+    private Disposable allJobsDisposable;
+    private Disposable jobsInAreaDisposable;
 
     private boolean loadingPostsFirstTime = true;
 
@@ -51,7 +57,23 @@ public class PostsMapFragment extends Fragment {
         panel = rootView.findViewById(R.id.panel);
         locationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
         addMapFragment();
+
+        jobsInAreaDisposable = postService.getPostInAreaObservable().subscribe(posts -> {
+            panel.setPosts(posts);
+            if (loadingPostsFirstTime) {
+                panel.setCollapse(false, true);
+                loadingPostsFirstTime = false;
+            }
+        });
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (allJobsDisposable != null) allJobsDisposable.dispose();
+        if (jobsInAreaDisposable != null) jobsInAreaDisposable.dispose();
+        super.onDestroy();
     }
 
     @SuppressLint("MissingPermission")
@@ -69,26 +91,32 @@ public class PostsMapFragment extends Fragment {
     private void onMapReady(GoogleMap map) {
         this.map = map;
 
+        if (allJobsDisposable != null) allJobsDisposable.dispose();
+        allJobsDisposable = postService.getAllPostsObservable().subscribe(posts -> {
+            map.clear();
+            for (Post post : posts) {
+                MarkerOptions options = createMarkerFromPost(post);
+                if (options != null) map.addMarker(options);
+            }
+        });
+
         Context ctx = this.getActivity();
         assert ctx != null;
 
         if (ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationClient.getLastLocation().addOnSuccessListener(location -> {
-                PostService.getInstance().setUserCurrentLocation(location);
-                showPostsInAreaDebounced();
-            });
+            locationClient.getLastLocation().addOnSuccessListener(postService::setUserCurrentLocation);
             setUpMyLocationButton();
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
-        map.setOnCameraIdleListener(this::showPostsInAreaDebounced);
+        map.setOnCameraIdleListener(this::updateAreaDebounced);
         map.getUiSettings().setMapToolbarEnabled(false);
 
         setUpCompassButton();
         setInitialViewPoint();
-        showAllPostMarkers();
+        fetchAllPosts();
     }
 
     private void setInitialViewPoint() {
@@ -123,10 +151,17 @@ public class PostsMapFragment extends Fragment {
                 10,
                 getResources().getDisplayMetrics())
         );
+
+        // Adjust the button's margin so that it's right below the toolbar
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+        rlp.setMargins(0, toolbar.getMeasuredHeight() + ((ViewGroup.MarginLayoutParams) toolbar.getLayoutParams()).topMargin + padding, 0, 0);
+        locationButton.setLayoutParams(rlp);
+
+        // Adjust the button's margin again every time the toolbar's layout change
         toolbar.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                    rlp.setMargins(0, bottom + padding, 0, 0);
-                    locationButton.setLayoutParams(rlp);
+                    RelativeLayout.LayoutParams _rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                    _rlp.setMargins(0, bottom + padding, 0, 0);
+                    locationButton.setLayoutParams(_rlp);
                 }
         );
     }
@@ -147,44 +182,45 @@ public class PostsMapFragment extends Fragment {
                 10,
                 getResources().getDisplayMetrics())
         );
+
+        // Adjust the button's margin so that it's right below the toolbar
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
+        rlp.setMargins(0, toolbar.getMeasuredHeight() + ((ViewGroup.MarginLayoutParams) toolbar.getLayoutParams()).topMargin + padding, 0, 0);
+        compassButton.setLayoutParams(rlp);
+
+        // Adjust the button's margin again every time the toolbar's layout change
         toolbar.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
-                    rlp.setMargins(0, bottom + padding, 0, 0);
-                    compassButton.setLayoutParams(rlp);
+                    RelativeLayout.LayoutParams _rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
+                    _rlp.setMargins(0, bottom + padding, 0, 0);
+                    compassButton.setLayoutParams(_rlp);
                 }
         );
     }
 
-    private void showPostsInAreaDebounced() {
-        showPostsDebouncer.debounce(this::showPostsInArea, 200, TimeUnit.MILLISECONDS);
+    private void updateAreaDebounced() {
+        showPostsDebouncer.debounce(this::updateArea, 200, TimeUnit.MILLISECONDS);
     }
 
     @SuppressLint("MissingPermission")
-    private void showPostsInArea() {
+    private void updateArea() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            PostService.getInstance().getPostsInArea(bounds).thenAccept(posts -> getActivity().runOnUiThread(() -> {
-                panel.setPosts(posts);
-                if (loadingPostsFirstTime) {
-                    panel.setCollapse(false, true);
-                    loadingPostsFirstTime = false;
-                }
-            }));
+            postService.setArea(bounds);
         });
     }
 
-    private void showAllPostMarkers() {
-        PostService.getInstance().getAllPosts().thenAccept(posts -> {
-            map.clear();
-            for (Post post : posts) {
-                map.addMarker(createMarkerFromPost(post));
-            }
-        });
+    private void fetchAllPosts() {
+        postService.getAllPosts();
     }
 
     private MarkerOptions createMarkerFromPost(Post post) {
+        Double lat = post.getLatitude();
+        Double lng = post.getLongitude();
+        if (lat == null || lng == null) return null;
+
+        LatLng pos = new LatLng(post.getLatitude(), post.getLongitude());
         return new MarkerOptions()
-                .position(new LatLng(post.getLatitude(), post.getLongitude()))
+                .position(pos)
                 .title(post.getPostTitle());
     }
 

@@ -27,6 +27,7 @@ public class Post {
     public static Post fromFirebaseSnapshot(DataSnapshot doc) {
         // TODO: handle the remaining fields
         Post post = new Post();
+        post.setPostID(doc.getKey());
         post.setPostTitle(doc.child("title").getValue(String.class));
         post.setAddress(doc.child("address").getValue(String.class));
         post.setOwnerID(doc.child("ownerID").getValue(String.class));
@@ -40,6 +41,22 @@ public class Post {
         post.setLatitude(doc.child("coords/lat").getValue(Double.class));
         post.setLongitude(doc.child("coords/lng").getValue(Double.class));
         return post;
+    }
+
+    public void updateWithPost(Post p) {
+        setPostID(p.getPostID());
+        setPostTitle(p.getPostTitle());
+        setStatus(p.getStatus());
+        setAddress(p.getAddress());
+        setLatitude(p.getLatitude());
+        setLongitude(p.getLongitude());
+        setOwnerID(p.getOwnerID());
+        setDate(p.getDate());
+        setImageIDs(p.getImageIDs());
+        setPaymentType(p.getPaymentType());
+        setExpectedHrs(p.getExpectedHrs());
+        setRate(p.getRate());
+        setTotalPay(p.getTotalPay());
     }
 
     public String getPostID() {
