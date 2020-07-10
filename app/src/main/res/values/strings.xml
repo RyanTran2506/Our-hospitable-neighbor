@@ -13,7 +13,7 @@
     <!--These string are for post-a-post activity-->
     <string name="createNewPost">Create A New Post</string>
     <string name="btnPost">Post</string>
-    <string name="edtPostName">Post Name</string>
+    <string name="edtPostName">Title</string>
     <string name="edtPostAddress">Address</string>
     <string name="edtPostPostalCode">Postal Code</string>
     <string name="txtPostPayment">Payment:</string>

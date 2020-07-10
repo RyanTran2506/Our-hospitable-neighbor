@@ -31,14 +31,14 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
+        android:background="@drawable/layout_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/edtPostAddress"
         android:inputType="textPersonName"
-        android:text="@string/edtPostAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPostName" />
@@ -49,15 +49,15 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:autofillHints=""
+        android:background="@drawable/layout_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/edtPostPostalCode"
         android:inputType="textPersonName"
-        android:text="@string/edtPostPostalCode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPostAddress" />
@@ -83,57 +83,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/txtPaymentRate"
-        android:layout_width="191dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:entries="@array/grpPayments"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPostPostalCode" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/txtPostPayment"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toStartOf="@+id/txtPaymentRateName"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPostPostalCode" />
-
-    <TextView
-        android:id="@+id/txtPaymentRateName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:text="@string/txtPaymentRateName"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
-        app:layout_constraintStart_toEndOf="@+id/edtRate"
-        app:layout_constraintTop_toBottomOf="@+id/txtPostPostalCode" />
-
-
-    <EditText
-        android:id="@+id/edtRate"
-        android:layout_width="72dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:background="@drawable/layout_bg"
-        app:layout_constraintStart_toEndOf="@+id/txtPaymentRate"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
