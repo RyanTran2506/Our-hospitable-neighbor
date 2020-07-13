@@ -27,4 +27,5 @@
     <string name="postDetailTitle">Post Detail</string>
     <string name="btnAcceptPost">Accept this Post</string>
     <string name="btnBack">Back</string>
+    <string name="txtSearchHint">Search something</string>
 </resources>

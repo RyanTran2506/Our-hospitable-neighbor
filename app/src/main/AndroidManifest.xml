@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SearchActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
             android:name=".ListPostInAreaActivity"
             android:label="Posts In Area" />
         <activity android:name=".Detail" />

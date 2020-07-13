@@ -23,15 +23,17 @@ import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import java9.util.concurrent.CompletableFuture;
 import java9.util.Optional;
+import java9.util.concurrent.CompletableFuture;
 
 public class PostService {
     private static PostService instance;
-    private DatabaseReference collection; // firebase storage
     private List<Post> posts = new ArrayList<>();
     private Map<String, Post> postsByID = new HashMap<>();
 
+    private DatabaseReference collection; // firebase storage
+
+    // Rx variables
     private final BehaviorSubject<List<Post>> allPostsSubject = BehaviorSubject.create();
     private final BehaviorSubject<List<Post>> postsInAreaSubject = BehaviorSubject.create();
     private final BehaviorSubject<LatLngBounds> areaSubject = BehaviorSubject.create();

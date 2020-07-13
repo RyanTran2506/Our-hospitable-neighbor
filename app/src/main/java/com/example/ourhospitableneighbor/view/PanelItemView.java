@@ -2,6 +2,7 @@ package com.example.ourhospitableneighbor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.R;
@@ -23,6 +25,7 @@ public class PanelItemView extends LinearLayout {
     private TextView txtAddress;
     private TextView txtDistance;
     private ImageView imgThumb;
+    private ConstraintLayout constraintLayout;
     private Post post;
 
     private static DecimalFormat fmt = new DecimalFormat("###,###.##");
@@ -51,15 +54,25 @@ public class PanelItemView extends LinearLayout {
         txtAddress = findViewById(R.id.txt_address);
         txtDistance = findViewById(R.id.txt_distance);
         imgThumb = findViewById(R.id.imageView);
+        constraintLayout = findViewById(R.id.PanelItemView_ConstraintLayout);
 
         setOrientation(LinearLayout.VERTICAL);
         setFocusable(true);
         setClickable(true);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imgThumb.setClipToOutline(true);
+        }
+
         // Set background to ?attr/selectableItemBackground
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         setBackgroundResource(outValue.resourceId);
+    }
+
+    public void setConstraintLayoutPadding(int left, int top, int right, int bottom) {
+        constraintLayout.setPadding(left, top, right, bottom);
+
     }
 
     public void setPost(Post post) {
@@ -74,7 +87,9 @@ public class PanelItemView extends LinearLayout {
     private void setThumbnailImage() {
         String thumbnail = post.getThumbnail();
         if (thumbnail != null) {
-            Glide.with(getContext()).load(storageReference.child(thumbnail)).into(imgThumb);
+            Glide.with(getContext())
+                    .load(storageReference.child(thumbnail))
+                    .into(imgThumb);
         }
 
     }
@@ -87,7 +102,7 @@ public class PanelItemView extends LinearLayout {
         } else {
             int distanceRounded = Math.round(distance);
             if (distanceRounded >= 1000) {
-                txtDistance.setText(fmt.format( distanceRounded / 1000f) + "km away");
+                txtDistance.setText(fmt.format(distanceRounded / 1000f) + "km away");
             } else {
                 txtDistance.setText(fmt.format(distanceRounded) + "m away");
             }

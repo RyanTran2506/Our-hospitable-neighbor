@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickSearch() {
-        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+        this.startActivity(new Intent(this, SearchActivity.class));
+        this.overridePendingTransition(0, 0); // Disable transition animation
     }
 
     private void setUpNavigation() {

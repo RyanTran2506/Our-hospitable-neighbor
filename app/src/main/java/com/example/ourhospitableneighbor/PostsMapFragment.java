@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ourhospitableneighbor.helper.Debouncer;
+import com.example.ourhospitableneighbor.helper.SizeConverter;
 import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.model.PostClusterItem;
 import com.example.ourhospitableneighbor.view.PanelView;
@@ -96,7 +97,7 @@ public class PostsMapFragment extends Fragment {
     private void onMapReady(GoogleMap map) {
         this.map = map;
 
-        Context ctx = this.getActivity();
+        Context ctx = getContext();
         assert ctx != null;
 
         if (ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -128,6 +129,7 @@ public class PostsMapFragment extends Fragment {
                 Post p = (Post) marker.getTag();
                 if (p == null) return null;
                 v.setPost(p);
+                v.setMarker(marker);
                 return v;
             }
         });
@@ -182,12 +184,7 @@ public class PostsMapFragment extends Fragment {
         View toolbar = getToolbar();
         if (toolbar == null) return;
 
-        // Convert dp to px
-        int padding = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                10,
-                getResources().getDisplayMetrics())
-        );
+        int padding = SizeConverter.fromDpToPx(getResources(), 10);
 
         // Adjust the button's margin so that it's right below the toolbar
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
@@ -213,12 +210,7 @@ public class PostsMapFragment extends Fragment {
         View toolbar = getToolbar();
         if (toolbar == null) return;
 
-        // Convert dp to px
-        int padding = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                10,
-                getResources().getDisplayMetrics())
-        );
+        int padding = SizeConverter.fromDpToPx(getResources(), 10);
 
         // Adjust the button's margin so that it's right below the toolbar
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
