@@ -31,7 +31,9 @@
             android:label="Posts In Area" />
         <activity android:name=".JobDetail" />
         <activity android:name=".History" />
-        <activity android:name=".CreatePostActivity" />
+        <activity
+            android:name=".CreatePostActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppThemeNoActionBar">

@@ -1,6 +1,7 @@
 package com.example.ourhospitableneighbor;
 
 import android.location.Location;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
@@ -86,5 +87,18 @@ public class PostService {
 
     public void setUserCurrentLocation(Location location) {
         this.userCurrentLocation = location;
+    }
+
+    public void add(Post post){
+        collection.push().setValue(post);
+    }
+
+    public int getMaxID(){
+        int result = -1;
+        for (Post post : posts) {
+            if(post.getPostID() > result)
+                result = post.getPostID();
+        }
+        return result + 1;
     }
 }
