@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.ourhospitableneighbor.view.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClickMyPosts() {
         Intent intent = new Intent(this, History.class);
+        startActivity(intent);
+    }
+    private void onClickLogIn() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

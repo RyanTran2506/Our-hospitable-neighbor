@@ -55,10 +55,12 @@ public class PostService {
             for (Post post : posts) {
                 Double lat = post.getLatitude();
                 Double lng = post.getLongitude();
+
                 if (lat == null || lng == null) continue;
+                
+                post.setUserCurrentLocation(location.orElse(null));
                 if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
                     postsInArea.add(post);
-                    post.setUserCurrentLocation(location.orElse(null));
                 }
             }
 

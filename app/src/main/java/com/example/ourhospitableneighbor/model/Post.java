@@ -28,12 +28,12 @@ public class Post {
         // TODO: handle the remaining fields
         Post post = new Post();
         post.setPostID(doc.getKey());
-        post.setPostTitle(doc.child("title").getValue(String.class));
+        post.setPostTitle(doc.child("postTitle").getValue(String.class));
         post.setAddress(doc.child("address").getValue(String.class));
         post.setOwnerID(doc.child("ownerID").getValue(String.class));
 
         List<String> imageIDs = new ArrayList<>();
-        for (DataSnapshot c : doc.child("images").getChildren()) {
+        for (DataSnapshot c : doc.child("imageIDs").getChildren()) {
             imageIDs.add(c.getValue(String.class));
         }
         post.setImageIDs(imageIDs);
