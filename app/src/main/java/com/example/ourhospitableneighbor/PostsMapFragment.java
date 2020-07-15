@@ -243,8 +243,6 @@ public class PostsMapFragment extends Fragment {
     }
 
     private PostClusterItem createMarkerFromPost(Post post) {
-//        Double lat = post.getLatitude();
-//        Double lng = post.getLongitude();
         Double lat = post.getCoords().getLat();
         Double lng = post.getCoords().getLng();
         if (lat == null || lng == null) return null;

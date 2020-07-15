@@ -17,13 +17,10 @@ import android.widget.Toast;
 
 import com.example.ourhospitableneighbor.model.Coords;
 import com.example.ourhospitableneighbor.model.Post;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.maps.android.data.geojson.GeoJsonPoint;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -89,6 +86,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     Uri uri = data.getData();
                     imgPaths.add(uri);
                 }
+
                 GridView imgGridView = findViewById(R.id.grdPhotos);
                 ImageAdapter imgAdapter = new ImageAdapter(CreatePostActivity.this, imgPaths);
                 imgGridView.setAdapter(imgAdapter);
@@ -135,7 +133,7 @@ public class CreatePostActivity extends AppCompatActivity {
         StorageReference ref = FirebaseStorage.getInstance().getReference().child("images");
 
         String folder = String.valueOf(post.getPostID());
-        if(imgPaths.size()>0){
+        if(imgPaths != null){
             for (int i = 1; i <= imgPaths.size(); i++){
                 StorageReference fileRef = ref.child(folder).child(i +".jpg");
                 fileRef.putFile(imgPaths.get(i-1));

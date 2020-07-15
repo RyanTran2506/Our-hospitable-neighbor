@@ -14,8 +14,6 @@ public class Post {
     private String postTitle;
     private PostStatus status;
     private String address;
-    //private Double latitude;
-    //private Double longitude;
     private Coords coords;
     private String ownerID;
     private LocalDate date;
@@ -39,12 +37,7 @@ public class Post {
         }
         post.setImageIDs(imageIDs);
 
-//        post.setLatitude(doc.child("coords/lat").getValue(Double.class));
-//        post.setLongitude(doc.child("coords/lng").getValue(Double.class));
-
         post.setCoords(new Coords(doc.child("coords/lat").getValue(Double.class),doc.child("coords/lng").getValue(Double.class)));
-//        post.coords.setLat(doc.child("coords/lat").getValue(Double.class));
-//        post.coords.setLng(doc.child("coords/lng").getValue(Double.class));
 
         return post;
     }
@@ -53,16 +46,10 @@ public class Post {
         setPostTitle(p.getPostTitle());
         setStatus(p.getStatus());
         setAddress(p.getAddress());
-//        setLatitude(p.getLatitude());
-//        setLongitude(p.getLongitude());
         setOwnerID(p.getOwnerID());
         setDate(p.getDate());
         setImageIDs(p.getImageIDs());
         setCoords(p.getCoords());
-//        setPaymentType(p.getPaymentType());
-//        setExpectedHrs(p.getExpectedHrs());
-//        setRate(p.getRate());
-//        setTotalPay(p.getTotalPay());
     }
 
     public String getPostID() {
@@ -96,23 +83,6 @@ public class Post {
     public void setAddress(String address) {
         this.address = address;
     }
-
-
-//    public Double getLatitude() {
-//        return latitude;
-//    }
-//
-//    public void setLatitude(Double latitude) {
-//        this.latitude = latitude;
-//    }
-//
-//    public Double getLongitude() {
-//        return longitude;
-//    }
-//
-//    public void setLongitude(Double longitude) {
-//        this.longitude = longitude;
-//    }
 
     public String getOwnerID() {
         return ownerID;
@@ -172,7 +142,6 @@ public class Post {
 
     private float getDistanceFromLocation(Location location) {
         float[] result = new float[1];
-        //Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.getLatitude(), this.getLongitude(), result);
         Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.getCoords().getLat(), this.getCoords().getLng(), result);
         return result[0];
     }
