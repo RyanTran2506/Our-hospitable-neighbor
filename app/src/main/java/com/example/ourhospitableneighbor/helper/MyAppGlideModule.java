@@ -1,4 +1,4 @@
-package com.example.ourhospitableneighbor;
+package com.example.ourhospitableneighbor.helper;
 
 import android.content.Context;
 

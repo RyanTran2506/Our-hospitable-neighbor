@@ -26,6 +26,7 @@ import com.google.maps.android.data.geojson.GeoJsonPoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -107,7 +108,8 @@ public class CreatePostActivity extends AppCompatActivity {
         String postAddress = edtPostAddress.getText().toString();
         int postWage = Integer.parseInt(edtPostWage.getText().toString());
         String postDes = edtPostDescription.getText().toString();
-        int id = PostService.getInstance().getMaxID();
+        //int id = PostService.getInstance().getMaxID();
+        String id = UUID.randomUUID().toString();
 
         Post post = new Post();
         post.setPostID(id);
