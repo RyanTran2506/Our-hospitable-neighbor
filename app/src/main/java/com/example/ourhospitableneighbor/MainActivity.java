@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+    private void onClickPostDetail(){
+        Intent intent = new Intent(this, PostDetail.class);
+        startActivity(intent);
+    }
 
     private void onClickLogOut() {
         Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();

@@ -2,17 +2,22 @@ package com.example.ourhospitableneighbor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.ourhospitableneighbor.MainActivity;
+import com.example.ourhospitableneighbor.PostDetail;
 import com.example.ourhospitableneighbor.R;
 import com.example.ourhospitableneighbor.model.Post;
 import com.google.firebase.storage.FirebaseStorage;
@@ -82,6 +87,7 @@ public class PanelItemView extends LinearLayout {
 
         setThumbnailImage();
         setDistanceText();
+        setOnClick();
     }
 
     private void setThumbnailImage() {
@@ -107,5 +113,16 @@ public class PanelItemView extends LinearLayout {
                 txtDistance.setText(fmt.format(distanceRounded) + "m away");
             }
         }
+    }
+
+    private void setOnClick(){
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PostDetail.class);
+                intent.putExtra("postID", post.getPostID());
+                getContext().startActivity(intent);
+            }
+        });
     }
 }

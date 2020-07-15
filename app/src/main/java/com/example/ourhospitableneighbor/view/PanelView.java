@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.ourhospitableneighbor.ListPostInAreaActivity;
+import com.example.ourhospitableneighbor.PostDetail;
 import com.example.ourhospitableneighbor.R;
 import com.example.ourhospitableneighbor.model.Post;
 

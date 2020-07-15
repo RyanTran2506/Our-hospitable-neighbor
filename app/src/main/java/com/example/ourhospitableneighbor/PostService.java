@@ -135,11 +135,6 @@ public class PostService {
         currentLocationSubject.onNext(Optional.of(location));
     }
 
-    public void add(Post post){
-        //collection.push().setValue(post);
-        collection.child(post.getPostID()).setValue(post);
-    }
-
     private final ChildEventListener firebaseChildEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -184,4 +179,17 @@ public class PostService {
         public void onCancelled(@NonNull DatabaseError error) {
         }
     };
+
+    public void add(Post post){
+        collection.child(post.getPostID()).setValue(post);
+    }
+
+    public Post getPost(String postID){
+        Post result = null;
+        for (Post post : posts) {
+            if(post.getPostID().equals(postID))
+                result = post;
+        }
+        return result;
+    }
 }

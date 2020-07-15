@@ -30,6 +30,8 @@ public class Post {
         post.setPostTitle(doc.child("postTitle").getValue(String.class));
         post.setAddress(doc.child("address").getValue(String.class));
         post.setOwnerID(doc.child("ownerID").getValue(String.class));
+        post.setDescription(doc.child("description").getValue(String.class));
+        post.setWage(doc.child("wage").getValue(Integer.class));
 
         List<String> imageIDs = new ArrayList<>();
         for (DataSnapshot c : doc.child("imageIDs").getChildren()) {
@@ -50,6 +52,8 @@ public class Post {
         setDate(p.getDate());
         setImageIDs(p.getImageIDs());
         setCoords(p.getCoords());
+        setDescription(p.getDescription());
+        setWage(p.getWage());
     }
 
     public String getPostID() {
