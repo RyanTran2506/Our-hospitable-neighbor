@@ -106,7 +106,6 @@ public class CreatePostActivity extends AppCompatActivity {
         String postAddress = edtPostAddress.getText().toString();
         int postWage = Integer.parseInt(edtPostWage.getText().toString());
         String postDes = edtPostDescription.getText().toString();
-        //int id = PostService.getInstance().getMaxID();
         String id = UUID.randomUUID().toString();
 
         Post post = new Post();
@@ -115,7 +114,7 @@ public class CreatePostActivity extends AppCompatActivity {
         post.setAddress(postAddress);
         post.setWage(postWage);
         post.setDescription(postDes);
-        post.setCoords(new Coords(getLatitudeFromAddress(postAddress), getLongitudeFromAddress(postAddress)));
+        post.setCoords(getCoordsFromAddress(postAddress));
         post.setImageIDs(convertLocalImgToFirebase(imgPaths, post));
         //change it back later
         post.setOwnerID("temp");
@@ -146,36 +145,20 @@ public class CreatePostActivity extends AppCompatActivity {
         return result;
     }
 
-    public double getLatitudeFromAddress(String strAddress){
+    public Coords getCoordsFromAddress(String strAddress){
         List<Address> addresses;
-        double latitude;
+        Coords coords = null;
         try{
             Geocoder coder = new Geocoder(this);
             addresses = coder.getFromLocationName(strAddress,5);
             Address location=addresses.get(0);
-            latitude = location.getLatitude();
+            Double latitude = location.getLatitude();
+            Double longitude = location.getLongitude();
+            coords = new Coords(latitude,longitude);
         }
         catch (Exception e){
-            latitude = 0;
             e.getMessage();
         }
-        return latitude;
-    }
-
-    public double getLongitudeFromAddress(String strAddress){
-
-        List<Address> addresses;
-        double longitude;
-        try{
-            Geocoder coder = new Geocoder(this);
-            addresses = coder.getFromLocationName(strAddress,5);
-            Address location=addresses.get(0);
-            longitude = location.getLongitude();
-        }
-        catch (Exception e){
-            longitude = 0;
-            e.getMessage();
-        }
-        return longitude;
+        return coords;
     }
 }
