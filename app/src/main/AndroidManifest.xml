@@ -43,11 +43,11 @@
             android:label="Posts In Area" />
         <activity
             android:name=".PostDetail"
-            android:theme="@style/AppThemeNoActionBar" />/>
+            android:label="Post Detail" />
         <activity android:name=".History" />
         <activity
             android:name=".CreatePostActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:label="Create A New Post"/>
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppThemeNoActionBar">

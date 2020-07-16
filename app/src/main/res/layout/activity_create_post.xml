@@ -9,26 +9,27 @@
     <EditText
         android:id="@+id/edtPostTitle"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
+        android:background="@drawable/layout_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/edtPostName"
         android:inputType="textPersonName"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:background="@drawable/layout_bg"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtPostAddress"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
@@ -39,14 +40,36 @@
         android:gravity="center"
         android:hint="@string/edtPostAddress"
         android:inputType="textPersonName"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPostTitle" />
 
     <EditText
+        android:id="@+id/edtContactPhoneNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/layout_bg"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Contact Phone Number"
+        android:inputType="number"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtPostAddress" />
+
+    <EditText
         android:id="@+id/edtPostWage"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
@@ -58,9 +81,11 @@
         android:gravity="center"
         android:hint="Wage (CAD)"
         android:inputType="number"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPostAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/edtContactPhoneNumber" />
 
     <Button
         android:id="@+id/btnPostPost"
@@ -72,17 +97,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/createNewPost"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtPostDescription"

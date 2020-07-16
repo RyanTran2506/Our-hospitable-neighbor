@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,8 +21,9 @@ public class Post {
     private List<String> imageIDs;
     private int wage;
     private Float distanceFromUserLocation;
-
     private String description;
+    private String wokerID;
+    private String contactPhoneNumber;
 
     public static Post fromFirebaseSnapshot(DataSnapshot doc) {
         // TODO: handle the remaining fields
@@ -31,7 +33,6 @@ public class Post {
         post.setAddress(doc.child("address").getValue(String.class));
         post.setOwnerID(doc.child("ownerID").getValue(String.class));
         post.setDescription(doc.child("description").getValue(String.class));
-        post.setWage(doc.child("wage").getValue(Integer.class));
 
         List<String> imageIDs = new ArrayList<>();
         for (DataSnapshot c : doc.child("imageIDs").getChildren()) {
@@ -40,6 +41,8 @@ public class Post {
         post.setImageIDs(imageIDs);
 
         post.setCoords(new Coords(doc.child("coords/lat").getValue(Double.class),doc.child("coords/lng").getValue(Double.class)));
+        post.setWage(doc.child("wage").getValue(Integer.class));
+        post.setContactPhoneNumber(doc.child("contactPhoneNumber").getValue(String.class));
 
         return post;
     }
@@ -51,9 +54,10 @@ public class Post {
         setOwnerID(p.getOwnerID());
         setDate(p.getDate());
         setImageIDs(p.getImageIDs());
-        setCoords(p.getCoords());
         setDescription(p.getDescription());
+        setCoords(p.getCoords());
         setWage(p.getWage());
+        setContactPhoneNumber(p.getContactPhoneNumber());
     }
 
     public String getPostID() {
@@ -124,6 +128,21 @@ public class Post {
         this.description = description;
     }
 
+    public String getWokerID() {
+        return wokerID;
+    }
+
+    public void setWokerID(String wokerID) {
+        this.wokerID = wokerID;
+    }
+
+    public String getContactPhoneNumber() {
+        return contactPhoneNumber;
+    }
+
+    public void setContactPhoneNumber(String contactPhoneNumber) {
+        this.contactPhoneNumber = contactPhoneNumber;
+    }
 
     public void setWage(int wage) {
         this.wage = wage;

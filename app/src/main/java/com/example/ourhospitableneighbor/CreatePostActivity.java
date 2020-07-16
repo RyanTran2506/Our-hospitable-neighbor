@@ -31,8 +31,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private ArrayList<Uri> imgPaths;
 
-    EditText edtPostTitle, edtPostAddress, edtPostWage, edtPostDescription;
-
+    EditText edtPostTitle, edtPostAddress, edtPostWage, edtPostDescription, edtContactPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,7 @@ public class CreatePostActivity extends AppCompatActivity {
         edtPostAddress = findViewById(R.id.edtPostAddress);
         edtPostWage = findViewById(R.id.edtPostWage);
         edtPostDescription = findViewById(R.id.edtPostDescription);
+        edtContactPhoneNumber = findViewById(R.id.edtContactPhoneNumber);
         Button btnPost = findViewById(R.id.btnPostPost);
         Button btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
 
@@ -104,27 +104,31 @@ public class CreatePostActivity extends AppCompatActivity {
     private void post(){
         String postTitle = edtPostTitle.getText().toString();
         String postAddress = edtPostAddress.getText().toString();
-        int postWage = Integer.parseInt(edtPostWage.getText().toString());
+        String postWage = edtPostWage.getText().toString();
         String postDes = edtPostDescription.getText().toString();
+        String contactPhoneNumber = edtContactPhoneNumber.getText().toString();
         String id = UUID.randomUUID().toString();
 
-        Post post = new Post();
-        post.setPostID(id);
-        post.setPostTitle(postTitle);
-        post.setAddress(postAddress);
-        post.setWage(postWage);
-        post.setDescription(postDes);
-        post.setCoords(getCoordsFromAddress(postAddress));
-        post.setImageIDs(convertLocalImgToFirebase(imgPaths, post));
-        //change it back later
-        post.setOwnerID("temp");
+        if(validateInput(postTitle, postAddress, contactPhoneNumber, postWage)==true){
+            Post post = new Post();
+            post.setPostID(id);
+            post.setPostTitle(postTitle);
+            post.setAddress(postAddress);
+            post.setWage(Integer.parseInt(postWage));
+            post.setDescription(postDes);
+            post.setCoords(getCoordsFromAddress(postAddress));
+            post.setContactPhoneNumber(contactPhoneNumber);
+            post.setImageIDs(convertLocalImgToFirebase(imgPaths, post));
+            //change it back later
+            post.setOwnerID("temp");
 
-        PostService.getInstance().add(post);
+            PostService.getInstance().add(post);
 
-        Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreatePostActivity.this, "Post created successfully!", Toast.LENGTH_SHORT).show();
 
-        Intent homeIntent = new Intent(CreatePostActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(homeIntent);
+            Intent homeIntent = new Intent(CreatePostActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+        }
     }
     private List<String> convertLocalImgToFirebase(ArrayList<Uri> imgPaths, Post post) {
         List<String> result = new ArrayList<String>();
@@ -160,5 +164,25 @@ public class CreatePostActivity extends AppCompatActivity {
             e.getMessage();
         }
         return coords;
+    }
+
+    private boolean validateInput(String postTitle, String postAddress, String postWage, String contactPhoneNumber){
+        if(postTitle.isEmpty()){
+            Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(postAddress.isEmpty()){
+            Toast.makeText(this, "Address cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(contactPhoneNumber.isEmpty()){
+            Toast.makeText(this, "Contact Phone Number cannot be empty", Toast.LENGTH_SHORT);
+            return false;
+        }
+        if(postWage.isEmpty()){
+            Toast.makeText(this, "Wage cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }
