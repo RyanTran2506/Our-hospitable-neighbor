@@ -102,12 +102,17 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void post(){
+        String id = UUID.randomUUID().toString();
         String postTitle = edtPostTitle.getText().toString();
         String postAddress = edtPostAddress.getText().toString();
         String postWage = edtPostWage.getText().toString();
         String postDes = edtPostDescription.getText().toString();
         String contactPhoneNumber = edtContactPhoneNumber.getText().toString();
-        String id = UUID.randomUUID().toString();
+
+        //Temp - change back later - Ryan
+        String ownerID = "Ryan";
+        String workerID = "";
+
 
         if(validateInput(postTitle, postAddress, contactPhoneNumber, postWage)==true){
             Post post = new Post();
@@ -119,8 +124,8 @@ public class CreatePostActivity extends AppCompatActivity {
             post.setCoords(getCoordsFromAddress(postAddress));
             post.setContactPhoneNumber(contactPhoneNumber);
             post.setImageIDs(convertLocalImgToFirebase(imgPaths, post));
-            //change it back later
-            post.setOwnerID("temp");
+            post.setOwnerID(ownerID);
+            post.setWokerID(workerID);
 
             PostService.getInstance().add(post);
 

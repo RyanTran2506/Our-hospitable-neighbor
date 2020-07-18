@@ -19,7 +19,9 @@
         android:gravity="center"
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
+        android:textColor="#0337F4"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,11 +112,12 @@
         android:id="@+id/btnPostDetail_Accept"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
         android:text="Take this Job"
+        android:background="@drawable/button_enable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -124,11 +127,12 @@
         android:id="@+id/btnPostDetail_Back"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginBottom="16dp"
         android:text="Back"
+        android:background="@drawable/button_enable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -141,6 +145,7 @@
         android:layout_marginTop="16dp"
         android:text="Address:"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPostDetail_Title" />
 
@@ -153,6 +158,7 @@
         android:layout_marginTop="16dp"
         android:text="Contact:"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -165,6 +171,7 @@
         android:layout_marginTop="16dp"
         android:text="Wage:"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -177,6 +184,7 @@
         android:layout_marginTop="16dp"
         android:text="Description:"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 

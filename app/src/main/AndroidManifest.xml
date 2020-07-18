@@ -44,7 +44,8 @@
         <activity
             android:name=".PostDetail"
             android:label="Post Detail" />
-        <activity android:name=".History" />
+        <activity android:name=".History"
+            android:label="History"/>
         <activity
             android:name=".CreatePostActivity"
             android:label="Create A New Post"/>

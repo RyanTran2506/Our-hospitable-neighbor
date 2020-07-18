@@ -43,6 +43,8 @@ public class Post {
         post.setCoords(new Coords(doc.child("coords/lat").getValue(Double.class),doc.child("coords/lng").getValue(Double.class)));
         post.setWage(doc.child("wage").getValue(Integer.class));
         post.setContactPhoneNumber(doc.child("contactPhoneNumber").getValue(String.class));
+        post.setOwnerID(doc.child("ownerID").getValue(String.class));
+        post.setWokerID(doc.child("workerID").getValue(String.class));
 
         return post;
     }
@@ -58,6 +60,8 @@ public class Post {
         setCoords(p.getCoords());
         setWage(p.getWage());
         setContactPhoneNumber(p.getContactPhoneNumber());
+        setOwnerID(p.getOwnerID());
+        setWokerID(p.getWokerID());
     }
 
     public String getPostID() {

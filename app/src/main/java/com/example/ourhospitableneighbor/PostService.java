@@ -185,10 +185,15 @@ public class PostService {
     }
 
     public Post getPost(String postID){
-        Post result = null;
-        for (Post post : posts) {
-            if(post.getPostID().equals(postID))
-                result = post;
+        return postsByID.get(postID);
+    }
+
+    public List<Post> getPostHistory(String userID){
+        List<Post> result = new ArrayList<>();
+        for (Post curPost:posts) {
+            if(curPost.getOwnerID().equals(userID) || curPost.getWokerID().equals(userID)){
+                result.add(curPost);
+            }
         }
         return result;
     }

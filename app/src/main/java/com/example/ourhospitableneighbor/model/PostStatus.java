@@ -1,7 +1,7 @@
 package com.example.ourhospitableneighbor.model;
 
 public enum PostStatus {
-    UNTAKE,
+    POSTED,
     TAKEN,
-    FINISH
+    FINISHED
 }
