@@ -53,7 +53,6 @@ public class PostDetail extends AppCompatActivity {
 
         setImgs();
 
-
         //Change it back later - Ryan
         String userID = "Ryan";
 
@@ -75,7 +74,10 @@ public class PostDetail extends AppCompatActivity {
             btnTakeJob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //post.setWokerID(userID);
+                    post.setWorkerID(userID);
+                    PostService.getInstance().updatePost(post);
+                    Intent intent = new Intent(PostDetail.this, History.class);
+                    startActivity(intent);
                 }
             });
         }

@@ -22,7 +22,7 @@ public class Post {
     private int wage;
     private Float distanceFromUserLocation;
     private String description;
-    private String wokerID;
+    private String workerID;
     private String contactPhoneNumber;
 
     public static Post fromFirebaseSnapshot(DataSnapshot doc) {
@@ -44,7 +44,7 @@ public class Post {
         post.setWage(doc.child("wage").getValue(Integer.class));
         post.setContactPhoneNumber(doc.child("contactPhoneNumber").getValue(String.class));
         post.setOwnerID(doc.child("ownerID").getValue(String.class));
-        post.setWokerID(doc.child("workerID").getValue(String.class));
+        post.setWorkerID(doc.child("workerID").getValue(String.class));
 
         return post;
     }
@@ -61,7 +61,7 @@ public class Post {
         setWage(p.getWage());
         setContactPhoneNumber(p.getContactPhoneNumber());
         setOwnerID(p.getOwnerID());
-        setWokerID(p.getWokerID());
+        setWorkerID(p.getWorkerID());
     }
 
     public String getPostID() {
@@ -132,12 +132,12 @@ public class Post {
         this.description = description;
     }
 
-    public String getWokerID() {
-        return wokerID;
+    public String getWorkerID() {
+        return workerID;
     }
 
-    public void setWokerID(String wokerID) {
-        this.wokerID = wokerID;
+    public void setWorkerID(String workerID) {
+        this.workerID = workerID;
     }
 
     public String getContactPhoneNumber() {

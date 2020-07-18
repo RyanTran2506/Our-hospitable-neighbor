@@ -1,10 +1,12 @@
 package com.example.ourhospitableneighbor;
 
 import android.location.Location;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.ourhospitableneighbor.model.Post;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -188,13 +190,26 @@ public class PostService {
         return postsByID.get(postID);
     }
 
-    public List<Post> getPostHistory(String userID){
+    public List<Post> getOwnedPost(String userID){
         List<Post> result = new ArrayList<>();
         for (Post curPost:posts) {
-            if(curPost.getOwnerID().equals(userID) || curPost.getWokerID().equals(userID)){
+            if(curPost.getOwnerID().equals(userID)){
                 result.add(curPost);
             }
         }
         return result;
+    }
+    public List<Post> getTakenPosts(String userID){
+        List<Post> result = new ArrayList<>();
+        for (Post curPost:posts) {
+            if(curPost.getWorkerID().equals(userID)){
+                result.add(curPost);
+            }
+        }
+        return result;
+    }
+
+    public void updatePost(Post post){
+        collection.child(post.getPostID()).setValue(post);
     }
 }

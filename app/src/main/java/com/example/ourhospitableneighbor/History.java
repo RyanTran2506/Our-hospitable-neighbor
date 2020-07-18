@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class History extends AppCompatActivity {
-    private List<Post> posts;
+    private List<Post> ownedPosts, takenPosts;
     String userID;
 
     @Override
@@ -26,36 +26,70 @@ public class History extends AppCompatActivity {
         //temp, change it back later - Ryan
         userID = "Ryan";
 
-        posts = PostService.getInstance().getPostHistory(userID);
-        if (posts == null) posts = new ArrayList<>();
+        ownedPosts = PostService.getInstance().getOwnedPost(userID);
+        if (ownedPosts == null) ownedPosts = new ArrayList<>();
 
-        RecyclerView recyclerView = findViewById(R.id.History_RecyclerView);
-        recyclerView.setAdapter(new Adapter());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView ownedRecyclerView = findViewById(R.id.History_Owned_RecyclerView);
+        ownedRecyclerView.setAdapter(new OwnedAdapter());
+        ownedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        takenPosts = PostService.getInstance().getTakenPosts(userID);
+        if (takenPosts == null) takenPosts = new ArrayList<>();
+
+        RecyclerView takenRecyclerView = findViewById(R.id.History_Taken_RecyclerView);
+        takenRecyclerView.setAdapter(new TakenAdapter());
+        takenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private class Adapter extends RecyclerView.Adapter<ViewHolder> {
+    private class OwnedAdapter extends RecyclerView.Adapter<OwnedViewHolder> {
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(new PanelItemView(parent.getContext()));
+        public OwnedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new OwnedViewHolder(new PanelItemView(parent.getContext()));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull History.ViewHolder holder, int position) {
-            holder.postItemView.setPost(posts.get(position));
+        public void onBindViewHolder(@NonNull OwnedViewHolder holder, int position) {
+            holder.postItemView.setPost(ownedPosts.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return posts.size();
+            return ownedPosts.size();
         }
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder {
+    private class TakenAdapter extends RecyclerView.Adapter<TakenViewHolder> {
+        @NonNull
+        @Override
+        public TakenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new TakenViewHolder(new PanelItemView(parent.getContext()));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull TakenViewHolder holder, int position) {
+            holder.postItemView.setPost(takenPosts.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return takenPosts.size();
+        }
+    }
+
+    private static class OwnedViewHolder extends RecyclerView.ViewHolder {
         private PanelItemView postItemView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public OwnedViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.postItemView = (PanelItemView) itemView;
+        }
+    }
+
+    private static class TakenViewHolder extends RecyclerView.ViewHolder {
+        private PanelItemView postItemView;
+
+        public TakenViewHolder(@NonNull View itemView) {
             super(itemView);
             this.postItemView = (PanelItemView) itemView;
         }

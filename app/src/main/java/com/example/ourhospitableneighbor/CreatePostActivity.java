@@ -125,7 +125,7 @@ public class CreatePostActivity extends AppCompatActivity {
             post.setContactPhoneNumber(contactPhoneNumber);
             post.setImageIDs(convertLocalImgToFirebase(imgPaths, post));
             post.setOwnerID(ownerID);
-            post.setWokerID(workerID);
+            post.setWorkerID(workerID);
 
             PostService.getInstance().add(post);
 
