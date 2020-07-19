@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.view.PanelItemView;
@@ -57,4 +60,5 @@ public class ListPostInAreaActivity extends AppCompatActivity {
             this.postItemView = (PanelItemView) itemView;
         }
     }
+
 }

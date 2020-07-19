@@ -13,7 +13,7 @@
     <!--These string are for post-a-post activity-->
     <string name="createNewPost">Create A New Post</string>
     <string name="btnPost">Post</string>
-    <string name="edtPostName">Post Name</string>
+    <string name="edtPostName">Title</string>
     <string name="edtPostAddress">Address</string>
     <string name="edtPostPostalCode">Postal Code</string>
     <string name="txtPostPayment">Payment:</string>
@@ -27,7 +27,9 @@
     <string name="postDetailTitle">Post Detail</string>
     <string name="btnAcceptPost">Accept this Post</string>
     <string name="btnBack">Back</string>
+    <string name="txtSearchHint">Search something</string>
     <string name="title_activity_login">LoginActivity</string>
+
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_register">Register</string>

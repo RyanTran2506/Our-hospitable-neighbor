@@ -1,4 +1,4 @@
-package com.example.ourhospitableneighbor;
+package com.example.ourhospitableneighbor.helper;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
