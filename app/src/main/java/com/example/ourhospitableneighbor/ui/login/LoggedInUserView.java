@@ -1,4 +1,4 @@
-package com.example.ourhospitableneighbor.view.ui.login;
+package com.example.ourhospitableneighbor.ui.login;
 
 /**
  * Class exposing authenticated user details to the UI.

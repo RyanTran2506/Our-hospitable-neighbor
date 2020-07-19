@@ -1,4 +1,4 @@
-package com.example.ourhospitableneighbor.view.ui.login;
+package com.example.ourhospitableneighbor.ui.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.example.ourhospitableneighbor.view.data.LoginRepository;
-import com.example.ourhospitableneighbor.view.data.Result;
-import com.example.ourhospitableneighbor.view.data.model.LoggedInUser;
+import com.example.ourhospitableneighbor.data.LoginRepository;
+import com.example.ourhospitableneighbor.data.Result;
+import com.example.ourhospitableneighbor.data.model.LoggedInUser;
 import com.example.ourhospitableneighbor.R;
 
 public class LoginViewModel extends ViewModel {
@@ -65,6 +65,6 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 1;
     }
 }

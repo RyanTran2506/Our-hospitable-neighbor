@@ -1,11 +1,11 @@
-package com.example.ourhospitableneighbor.view.ui.login;
+package com.example.ourhospitableneighbor.ui.login;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import com.example.ourhospitableneighbor.view.data.LoginDataSource;
-import com.example.ourhospitableneighbor.view.data.LoginRepository;
+import com.example.ourhospitableneighbor.data.LoginDataSource;
+import com.example.ourhospitableneighbor.data.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

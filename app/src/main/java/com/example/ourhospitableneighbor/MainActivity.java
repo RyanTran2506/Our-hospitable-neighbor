@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.ourhospitableneighbor.view.ui.login.LoginActivity;
+import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

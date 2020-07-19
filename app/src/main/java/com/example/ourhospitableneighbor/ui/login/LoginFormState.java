@@ -1,4 +1,4 @@
-package com.example.ourhospitableneighbor.view.ui.login;
+package com.example.ourhospitableneighbor.ui.login;
 
 import androidx.annotation.Nullable;
 
