@@ -17,8 +17,8 @@ public class LoginDataSource {
     public void init(){
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
-        LoggedInUser user = new LoggedInUser("test","emma");
-        myRef.setValue(user);
+        LoggedInUser user = new LoggedInUser("test2","emmatrrr");
+        myRef.push().setValue(user);
     }
 
     public Result<LoggedInUser> login(String username, String password) {
