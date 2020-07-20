@@ -32,7 +32,7 @@ import com.example.ourhospitableneighbor.ui.login.LoginViewModelFactory;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    Button btnRegister;
+    TextView login_register;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        btnRegister = findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        login_register = findViewById(R.id.login_register);
+        login_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginDataSource loginDataSource = new LoginDataSource();
