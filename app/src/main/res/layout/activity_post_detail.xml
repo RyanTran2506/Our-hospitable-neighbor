@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PostDetail">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/txtPostDetail_Title"
         android:layout_width="0dp"
@@ -108,33 +111,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPostDetail_Desc" />
 
-    <Button
-        android:id="@+id/btnPostDetail_Accept"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:text="Take this Job"
-        android:background="@drawable/button_enable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnPostDetail_Back" />
+        <Button
+            android:id="@+id/btnPostDetail_Accept"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_enable"
+            android:text="Take this Job"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/btnPostDetail_Back"
+            app:layout_constraintTop_toBottomOf="@+id/grdPostDetail_Photos"
+            app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/btnPostDetail_Back"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="16dp"
-        android:text="Back"
-        android:background="@drawable/button_enable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/btnPostDetail_Back"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_enable"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grdPostDetail_Photos"
+            app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView2"
@@ -195,4 +204,5 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="159dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
