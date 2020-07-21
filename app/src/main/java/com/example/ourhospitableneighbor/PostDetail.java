@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -50,6 +51,7 @@ public class PostDetail extends AppCompatActivity {
         txtPostContact = findViewById(R.id.txtPostDetail_Contact);
         txtPostDesc = findViewById(R.id.txtPostDetail_Desc);
         grdImages = findViewById(R.id.grdPostDetail_Photos);
+
 
         setImgs();
 

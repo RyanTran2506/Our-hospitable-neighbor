@@ -39,6 +39,7 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
 
         edtPostTitle = findViewById(R.id.edtPostTitle);
+        edtPostTitle.requestFocus();
         edtPostAddress = findViewById(R.id.edtPostAddress);
         edtPostWage = findViewById(R.id.edtPostWage);
         edtPostDescription = findViewById(R.id.edtPostDescription);
