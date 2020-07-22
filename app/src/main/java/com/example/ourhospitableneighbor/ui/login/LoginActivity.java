@@ -28,6 +28,11 @@ import com.example.ourhospitableneighbor.R;
 import com.example.ourhospitableneighbor.Register;
 import com.example.ourhospitableneighbor.data.LoginDataSource;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import io.reactivex.rxjava3.internal.schedulers.ExecutorScheduler;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
@@ -128,8 +133,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+
+                Executors.newSingleThreadExecutor().submit(() -> loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString()));
             }
         });
     }

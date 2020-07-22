@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.ourhospitableneighbor.data.model.LoggedInUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,11 +26,13 @@ public class LoginDataSource {
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
 
+
+    public LoginDataSource() {
+        init();
+    }
+
     public void init(){
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("users");
-        LoggedInUser user = new LoggedInUser("test2","emmatr");
-        myRef.push().setValue(user);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public Result<LoggedInUser> login(String username, String password) {
@@ -37,18 +40,15 @@ public class LoginDataSource {
         try {
             // TODO: handle loggedInUser authentication
 
-            mAuth.signInWithEmailAndPassword(username, password)
-                    .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                // Go to main activity
-                                Log.i("Test", "User logined");
-                            }
-                        }
-                    });
+            AuthResult authResult = Tasks.await(mAuth.signInWithEmailAndPassword(username, password));
+            FirebaseUser user = authResult.getUser();
+
+            if (user == null) {
+                return new Result.Error(new Exception("User name password are not matched"));
+            } else {
+                return new Result.Success<>(new LoggedInUser(user.getUid(), null));
+            }
+
 
 
 //            if(username.equals("test") && password.equals("1234")) {
@@ -59,7 +59,7 @@ public class LoginDataSource {
 //                return new Result.Success<>(fakeUser);
 //            }
 
-            return new Result.Error(new Exception("User name password are not matched"));
+            //return new Result.Error(new Exception("User name password are not matched"));
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }

@@ -28,8 +28,9 @@
             android:id="@+id/nav_header_imageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/placeholder_square"
-            android:background="@drawable/img_avatar_background"/>
+            android:background="@drawable/img_avatar_background"
+            android:scaleType="center"
+            android:src="@drawable/placeholder_square" />
 
         <TextView
             android:id="@+id/nav_header_textView"

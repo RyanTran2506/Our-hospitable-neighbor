@@ -13,17 +13,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ourhospitableneighbor.data.model.LoggedInUser;
 import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class Register extends AppCompatActivity {
 
     EditText txtEmail;
     EditText txtPwd;
+    EditText txtName;
     Button btnSignUp;
     FirebaseAuth mAuth;
     TextView linkLogin;
@@ -41,6 +47,7 @@ public class Register extends AppCompatActivity {
         txtPwd = findViewById(R.id.txtPwd);
         btnSignUp = findViewById(R.id.btnSignup);
         linkLogin = findViewById(R.id.linkLogin);
+        txtName = findViewById(R.id.txtName);
 
         linkLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +85,11 @@ public class Register extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
+
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference("users").child(user.getUid());
+                                    myRef.child("name").setValue(txtName.getText().toString());
+
                                     //updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -89,5 +101,14 @@ public class Register extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    private void getAvatarImages() {
+        StorageReference  ref = FirebaseStorage.getInstance().getReference("avatars");
+        ref.listAll().addOnSuccessListener(result -> {
+           for (StorageReference fileRef: result.getItems()) {
+
+           }
+        });
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +28,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private TextView txtUserName;
+    private ImageView imgAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navView = findViewById(R.id.nav_view);
         View navHeader = navView.getHeaderView(0);
         txtUserName = navHeader.findViewById(R.id.nav_header_textView);
+        imgAvatar = navHeader.findViewById(R.id.nav_header_imageView);
 
         setUpNavigation();
         fillCurrentUser();
@@ -86,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickLogOut() {
-        Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     private void onClickSearch() {
@@ -149,15 +156,25 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/name").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("users/").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                txtUserName.setText(snapshot.getValue(String.class));
+                txtUserName.setText(snapshot.child("name").getValue(String.class));
+
+                String avatarLink = snapshot.child("avatarLink").getValue(String.class);
+                if (avatarLink == null || avatarLink.isEmpty()) return;
+
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference("avatars");
+                Glide.with(MainActivity.this).load(storageReference.child(avatarLink))
+                        .placeholder(R.drawable.placeholder_square)
+                        .into(imgAvatar);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+
     }
 }
