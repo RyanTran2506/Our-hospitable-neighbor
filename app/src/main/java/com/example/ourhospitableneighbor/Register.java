@@ -38,7 +38,7 @@ public class Register extends AppCompatActivity {
     Button btnrSignUp;
     FirebaseAuth mAuth;
     TextView linkrLogin;
-    final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+    ProgressBar loadingProgressBar;
     final static String TAG = "Register";
 
     @Override
@@ -49,15 +49,13 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         rEmail = findViewById(R.id.txtEmail);
         rName = findViewById(R.id.txtName);
-        rDOB=findViewById(R.id.txtDOB);
-        rPhone=findViewById(R.id.txtPhone);
+        rDOB = findViewById(R.id.txtDOB);
+        rPhone = findViewById(R.id.txtPhoneReg);
         rPwd = findViewById(R.id.txtPwd);
-        rConfirmEmail=findViewById(R.id.txtConfirmPwd);
+        rConfirmEmail = findViewById(R.id.txtConfirmPwd);
         btnrSignUp = findViewById(R.id.btnSignup);
         linkrLogin = findViewById(R.id.linkLogin);
-
-
-
+        loadingProgressBar = findViewById(R.id.loading);
 
         linkrLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +66,7 @@ public class Register extends AppCompatActivity {
     }
 
 
-    public void goToLogin()
-    {
+    public void goToLogin() {
         Intent intent = new Intent(Register.this, LoginActivity.class);
         startActivity(intent);
     }
@@ -84,75 +81,73 @@ public class Register extends AppCompatActivity {
     }
 
 
-
     public void onSignUpClick(View v) {
 
-        String fullName=rName.getText().toString();
+        String fullName = rName.getText().toString();
         String email = rEmail.getText().toString();
         String password = rPwd.getText().toString();
-        String dob=rDOB.getText().toString();
-        String phone=rPhone.getText().toString();
+        String dob = rDOB.getText().toString();
+        String phone = rPhone.getText().toString();
 
-        if(TextUtils.isEmpty(email)){
+        if (TextUtils.isEmpty(email)) {
             rEmail.setError("Email is required");
-            return ;
+            return;
         }
 
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             rPwd.setError("Password is required");
-            return ;
+            return;
         }
 
-        if(TextUtils.isEmpty(fullName)){
+        if (TextUtils.isEmpty(fullName)) {
             rName.setError("Full name is required");
-            return ;
+            return;
         }
-        if (password.length()<6){
+        if (password.length() < 6) {
             rPwd.setError("Password mus be more than 6 characters");
         }
-        if(TextUtils.isEmpty(phone)){
+        if (TextUtils.isEmpty(phone)) {
             rPhone.setError("Email is required");
-            return ;
+            return;
         }
-        if(TextUtils.isEmpty(dob)){
+        if (TextUtils.isEmpty(dob)) {
             rDOB.setError("Email is required");
-            return ;
+            return;
         }
         loadingProgressBar.setVisibility(View.VISIBLE);
 
-        mAuth.createUserWithEmailAndPassword( email, password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                    DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                                    myRef.child("name").setValue(rName.getText().toString());
-                                    Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
-                                    updateUI(user);
-                                    goToLogin();
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("users").child(user.getUid());
+                            myRef.child("name").setValue(rName.getText().toString());
+                            Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
+                            updateUI(user);
+                            goToLogin();
 
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                            }
-
-                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            updateUI(null);
                         }
-                );
+
+                    }
+                });
     }
 
     private void getAvatarImages() {
-        StorageReference  ref = FirebaseStorage.getInstance().getReference("avatars");
+        StorageReference ref = FirebaseStorage.getInstance().getReference("avatars");
         ref.listAll().addOnSuccessListener(result -> {
-           for (StorageReference fileRef: result.getItems()) {
+            for (StorageReference fileRef : result.getItems()) {
 
-           }
+            }
         });
     }
 }

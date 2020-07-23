@@ -82,14 +82,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:text="Phone number" />
+
         <EditText
-            android:id="@+id/txtPhone"
+            android:id="@+id/txtPhoneReg"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:ems="10"
-            android:inputType="phone"
-            android:hint="Phone number"/>
+            android:inputType="phone" />
+
         <TextView
         android:id="@+id/fourTxt"
         android:layout_width="wrap_content"

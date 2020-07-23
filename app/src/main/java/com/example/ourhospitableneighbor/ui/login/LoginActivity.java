@@ -46,12 +46,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     TextView login_register;
-    final EditText usernameEditText = findViewById(R.id.login_txtEmail);
-    final EditText passwordEditText = findViewById(R.id.login_txtPwd);
-    final Button loginButton = findViewById(R.id.login_btnLogin);
-    final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+    EditText usernameEditText;
+    EditText passwordEditText;
+    Button loginButton;
+    ProgressBar loadingProgressBar;
     FirebaseAuth mAuth;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,11 +58,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-        mAuth= FirebaseAuth.getInstance();
 
-
-
+        mAuth = FirebaseAuth.getInstance();
+        usernameEditText = findViewById(R.id.login_txtEmail);
+        passwordEditText = findViewById(R.id.login_txtPwd);
+        loginButton = findViewById(R.id.login_btnLogin);
+        loadingProgressBar = findViewById(R.id.loading);
         login_register = findViewById(R.id.linkLogin);
+
         login_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,15 +100,15 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loadingProgressBar.setVisibility(View.GONE);
                 if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
+                    //showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
+                    //updateUiWithUser(loginResult.getSuccess());
                 }
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                finish();
+                //finish();
             }
         });
 
@@ -140,83 +142,39 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-EditText lEmail= findViewById(R.id.login_txtEmail);
-EditText lPass=findViewById(R.id.login_txtPwd);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-String email=lEmail.getText().toString().trim();
-String pass= lPass.getText().toString().trim();
-                if(TextUtils.isEmpty(email)){
-                    lEmail.setError("Email is required");
-                    return ;
-                }
-
-                if(TextUtils.isEmpty(pass)){
-                    lPass.setError("Password is required");
-                    return ;
-                }
-
-
-                if (pass.length()<6){
-                    lPass.setError("Password mus be more than 6 characters");
-                }
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                //how to put afterTextChanged
-
-
-                mAuth.signInWithEmailAndPassword( email, pass)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(LoginActivity.this,"Log in succesfullly",Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-
-                                    Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                                }
-
-                            }
-                        }
-
-//                Executors.newSingleThreadExecutor().submit(()
-//                        -> loginViewModel.login(usernameEditText.getText().toString(),
-//                        passwordEditText.getText().toString()));
-//
-//                System.out.println("--------------"+loginViewModel.getLoginResult());
-
-        });
     }
 
-////    private void updateUiWithUser(LoggedInUserView model) {
-////        String welcome = getString(R.string.welcome) + model.getDisplayName();
-////        // TODO : initiate successful logged in experience
-////        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-////        Intent intent = new Intent(this, MainActivity.class);
-////        startActivity(intent);
-////    }
-//
-////    private void showLoginFailed(@StringRes Integer errorString) {
-////        System.out.println("sssss");
-//       // Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-////        Intent intent = new Intent(this, MainActivity.class);
-////        startActivity(intent);
-////        super.onResume();
-//
-////    }
-////
-////    @Override
-////    protected void onPause() {
-////        super.onPause();
-////        super.onResume();
-////        System.out.println("ddd");
-////        Toast.makeText(getApplicationContext(),"Wrong Email/ Password",Toast.LENGTH_SHORT).show();
-////        //TODO: Mai sua
+    public void onLoginClickHandler(View v) {
+        String email = usernameEditText.getText().toString().trim();
+        String pass = passwordEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(pass)) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (pass.length() < 6) {
+            Toast.makeText(this, "Password mus be more than 6 characters", Toast.LENGTH_SHORT).show();
+        }
 
+        loadingProgressBar.setVisibility(View.VISIBLE);
+        //how to put afterTextChanged
+        mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(LoginActivity.this, "Log in succesfullly", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
