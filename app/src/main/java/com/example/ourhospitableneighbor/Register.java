@@ -33,7 +33,7 @@ public class Register extends AppCompatActivity {
     EditText rPwd;
     EditText rName;
     EditText rDOB;
-    EditText rAdress;
+    EditText rPhone;
     EditText rConfirmEmail;
     Button btnrSignUp;
     FirebaseAuth mAuth;
@@ -50,7 +50,7 @@ public class Register extends AppCompatActivity {
         rEmail = findViewById(R.id.txtEmail);
         rName = findViewById(R.id.txtName);
         rDOB=findViewById(R.id.txtDOB);
-        rAdress=findViewById(R.id.txtAddress);
+        rPhone=findViewById(R.id.txtPhone);
         rPwd = findViewById(R.id.txtPwd);
         rConfirmEmail=findViewById(R.id.txtConfirmPwd);
         btnrSignUp = findViewById(R.id.btnSignup);
@@ -90,6 +90,8 @@ public class Register extends AppCompatActivity {
         String fullName=rName.getText().toString();
         String email = rEmail.getText().toString();
         String password = rPwd.getText().toString();
+        String dob=rDOB.getText().toString();
+        String phone=rPhone.getText().toString();
 
         if(TextUtils.isEmpty(email)){
             rEmail.setError("Email is required");
@@ -107,6 +109,14 @@ public class Register extends AppCompatActivity {
         }
         if (password.length()<6){
             rPwd.setError("Password mus be more than 6 characters");
+        }
+        if(TextUtils.isEmpty(phone)){
+            rPhone.setError("Email is required");
+            return ;
+        }
+        if(TextUtils.isEmpty(dob)){
+            rDOB.setError("Email is required");
+            return ;
         }
         loadingProgressBar.setVisibility(View.VISIBLE);
 
@@ -129,8 +139,8 @@ public class Register extends AppCompatActivity {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
-                                }
+                                    updateUI(null);
+                            }
 
                             }
                         }

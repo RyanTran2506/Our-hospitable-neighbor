@@ -90,25 +90,25 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-//            @Override
-//            public void onChanged(@Nullable LoginResult loginResult) {
-//                if (loginResult == null) {
-//                    return;
-//                }
-//                loadingProgressBar.setVisibility(View.GONE);
-//                if (loginResult.getError() != null) {
-//                    showLoginFailed(loginResult.getError());
-//                }
-//                if (loginResult.getSuccess() != null) {
-//                    updateUiWithUser(loginResult.getSuccess());
-//                }
-//                setResult(Activity.RESULT_OK);
-//
-//                //Complete and destroy login activity once successful
-//                finish();
-//            }
-//        });
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+            @Override
+            public void onChanged(@Nullable LoginResult loginResult) {
+                if (loginResult == null) {
+                    return;
+                }
+                loadingProgressBar.setVisibility(View.GONE);
+                if (loginResult.getError() != null) {
+                    showLoginFailed(loginResult.getError());
+                }
+                if (loginResult.getSuccess() != null) {
+                    updateUiWithUser(loginResult.getSuccess());
+                }
+                setResult(Activity.RESULT_OK);
+
+                //Complete and destroy login activity once successful
+                finish();
+            }
+        });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -178,7 +178,7 @@ String pass= lPass.getText().toString().trim();
                                     // If sign in fails, display a message to the user.
 
                                     Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
+                                    updateUI(null);
                                 }
 
                             }
@@ -193,30 +193,30 @@ String pass= lPass.getText().toString().trim();
         });
     }
 
-//    private void updateUiWithUser(LoggedInUserView model) {
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//    }
-
-//    private void showLoginFailed(@StringRes Integer errorString) {
-//        System.out.println("sssss");
-       // Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        super.onResume();
-
-//    }
+////    private void updateUiWithUser(LoggedInUserView model) {
+////        String welcome = getString(R.string.welcome) + model.getDisplayName();
+////        // TODO : initiate successful logged in experience
+////        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+////        Intent intent = new Intent(this, MainActivity.class);
+////        startActivity(intent);
+////    }
 //
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        super.onResume();
-//        System.out.println("ddd");
-//        Toast.makeText(getApplicationContext(),"Wrong Email/ Password",Toast.LENGTH_SHORT).show();
-//        //TODO: Mai sua
+////    private void showLoginFailed(@StringRes Integer errorString) {
+////        System.out.println("sssss");
+//       // Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+////        Intent intent = new Intent(this, MainActivity.class);
+////        startActivity(intent);
+////        super.onResume();
+//
+////    }
+////
+////    @Override
+////    protected void onPause() {
+////        super.onPause();
+////        super.onResume();
+////        System.out.println("ddd");
+////        Toast.makeText(getApplicationContext(),"Wrong Email/ Password",Toast.LENGTH_SHORT).show();
+////        //TODO: Mai sua
 
     }
 }

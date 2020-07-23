@@ -83,7 +83,7 @@
             android:layout_marginLeft="30dp"
             android:text="Phone number" />
         <EditText
-            android:id="@+id/txtAddress"
+            android:id="@+id/txtPhone"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
