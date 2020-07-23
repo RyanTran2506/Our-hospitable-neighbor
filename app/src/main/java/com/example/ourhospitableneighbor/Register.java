@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,13 +29,16 @@ import com.google.firebase.storage.StorageReference;
 
 public class Register extends AppCompatActivity {
 
-    EditText txtEmail;
-    EditText txtPwd;
-    EditText txtName;
-    Button btnSignUp;
+    EditText rEmail;
+    EditText rPwd;
+    EditText rName;
+    EditText rDOB;
+    EditText rAdress;
+    EditText rConfirmEmail;
+    Button btnrSignUp;
     FirebaseAuth mAuth;
-    TextView linkLogin;
-
+    TextView linkrLogin;
+    final ProgressBar loadingProgressBar = findViewById(R.id.loading);
     final static String TAG = "Register";
 
     @Override
@@ -41,21 +46,27 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
         mAuth = FirebaseAuth.getInstance();
-        txtEmail = findViewById(R.id.txtEmail);
-        txtPwd = findViewById(R.id.txtPwd);
-        btnSignUp = findViewById(R.id.btnSignup);
-        linkLogin = findViewById(R.id.linkLogin);
-        txtName = findViewById(R.id.txtName);
+        rEmail = findViewById(R.id.txtEmail);
+        rName = findViewById(R.id.txtName);
+        rDOB=findViewById(R.id.txtDOB);
+        rAdress=findViewById(R.id.txtAddress);
+        rPwd = findViewById(R.id.txtPwd);
+        rConfirmEmail=findViewById(R.id.txtConfirmPwd);
+        btnrSignUp = findViewById(R.id.btnSignup);
+        linkrLogin = findViewById(R.id.linkLogin);
 
-        linkLogin.setOnClickListener(new View.OnClickListener() {
+
+
+
+        linkrLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToLogin();
             }
         });
     }
+
 
     public void goToLogin()
     {
@@ -72,12 +83,34 @@ public class Register extends AppCompatActivity {
         }
     }
 
+
+
     public void onSignUpClick(View v) {
 
-        String email = txtEmail.getText().toString();
-        String password = txtPwd.getText().toString();
+        String fullName=rName.getText().toString();
+        String email = rEmail.getText().toString();
+        String password = rPwd.getText().toString();
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        if(TextUtils.isEmpty(email)){
+            rEmail.setError("Email is required");
+            return ;
+        }
+
+        if(TextUtils.isEmpty(password)){
+            rPwd.setError("Password is required");
+            return ;
+        }
+
+        if(TextUtils.isEmpty(fullName)){
+            rName.setError("Full name is required");
+            return ;
+        }
+        if (password.length()<6){
+            rPwd.setError("Password mus be more than 6 characters");
+        }
+        loadingProgressBar.setVisibility(View.VISIBLE);
+
+        mAuth.createUserWithEmailAndPassword( email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -85,12 +118,13 @@ public class Register extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                                    myRef.child("name").setValue(txtName.getText().toString());
+                                    myRef.child("name").setValue(rName.getText().toString());
+                                    Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
+                                    updateUI(user);
+                                    goToLogin();
 
-                                    //updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());

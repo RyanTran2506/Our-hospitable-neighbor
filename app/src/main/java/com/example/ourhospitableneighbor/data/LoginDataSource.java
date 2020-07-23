@@ -33,6 +33,7 @@ public class LoginDataSource {
 
     public void init(){
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     public Result<LoggedInUser> login(String username, String password) {

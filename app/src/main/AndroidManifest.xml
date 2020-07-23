@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ourhospitableneighbor">
-
+<uses-permission android:name="android.permission.INTERNET"/>
     <permission
         android:name="com.google.maps.android.utils.permission.MAPS_RECEIVE"
         android:protectionLevel="normal" />
@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AboutMe"></activity>
         <activity android:name=".Register" />
         <activity android:name=".ui.login.LoginActivity">
             <intent-filter android:label="@string/title_activity_login">
@@ -52,12 +53,12 @@
             android:name=".MainActivity"
             android:theme="@style/AppThemeNoActionBar">
 
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <meta-data

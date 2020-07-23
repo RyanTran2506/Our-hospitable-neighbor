@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register">
+    tools:context=".Register"
+    android:gravity="center">
 
 
     <LinearLayout
@@ -15,7 +16,7 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="112dp"
             app:srcCompat="@drawable/goodneighbor" />
 
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Registration"
             android:textSize="25dp"
             android:textStyle="bold" />
@@ -33,45 +34,93 @@
             android:id="@+id/fstTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:text="Full Name" />
 
         <EditText
             android:id="@+id/txtName"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:ems="10" />
-
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:hint="First Name/LastName" />
         <TextView
             android:id="@+id/secTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:text="Email" />
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Date of birth" />
 
         <EditText
-            android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtDOB"
+            android:layout_width="304dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:ems="10" />
-
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:hint="DD/MM/YYYY"
+            android:inputType="datetime" />
         <TextView
             android:id="@+id/thirdTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:text="Password" />
+            android:layout_marginLeft="30dp"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:inputType="textEmailAddress"/>
+        <TextView
+            android:id="@+id/sixTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="Phone number" />
+        <EditText
+            android:id="@+id/txtAddress"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:inputType="phone"
+            android:hint="Phone number"/>
+        <TextView
+        android:id="@+id/fourTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="Password" />
 
         <EditText
             android:id="@+id/txtPwd"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="40dp"
             android:ems="10"
             android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/fifthTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="Confirm Password" />
+
+        <EditText
+            android:id="@+id/txtConfirmPwd"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="If you input wrong, you input twice, dont worry"/>
+
 
         <Button
             android:id="@+id/btnSignup"
@@ -85,12 +134,20 @@
             android:id="@+id/linkLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:onClick="onSignUpClick"
             android:text="Already Registered? Login here"
             android:textColor="#3F51B5"
             android:textSize="20dp" />
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:visibility="gone"
+             />
 
     </LinearLayout>
 </ScrollView>
