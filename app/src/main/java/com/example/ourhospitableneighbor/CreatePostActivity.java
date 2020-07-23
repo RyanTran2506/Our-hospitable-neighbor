@@ -1,5 +1,6 @@
 package com.example.ourhospitableneighbor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
@@ -15,8 +16,15 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.model.Coords;
 import com.example.ourhospitableneighbor.model.Post;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -110,8 +118,8 @@ public class CreatePostActivity extends AppCompatActivity {
         String postDes = edtPostDescription.getText().toString();
         String contactPhoneNumber = edtContactPhoneNumber.getText().toString();
 
-        //Temp - change back later - Ryan
-        String ownerID = "Ryan";
+
+        String ownerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String workerID = "";
 
 
@@ -191,4 +199,5 @@ public class CreatePostActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }

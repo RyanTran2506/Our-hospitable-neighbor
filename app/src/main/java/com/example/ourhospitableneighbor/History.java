@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.view.PanelItemView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,7 @@ public class History extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        //temp, change it back later - Ryan
-        userID = "Ryan";
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         ownedPosts = PostService.getInstance().getOwnedPost(userID);
         if (ownedPosts == null) ownedPosts = new ArrayList<>();

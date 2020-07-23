@@ -20,6 +20,13 @@ import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.model.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -31,9 +38,10 @@ import java.util.List;
 
 public class PostDetail extends AppCompatActivity {
     String postID;
+    String ownerName;
     Post post;
 
-    TextView txtPostTitle, txtPostAddress, txtPostWage,txtPostContact, txtPostDesc;
+    TextView txtPostTitle, txtPostAddress, txtPostWage,txtPostContact, txtPostDesc, txtPostOwner;
     GridView grdImages;
     Button btnTakeJob, btnBack;
 
@@ -46,17 +54,15 @@ public class PostDetail extends AppCompatActivity {
         post = PostService.getInstance().getPost(postID);
 
         txtPostTitle = findViewById(R.id.txtPostDetail_Title);
+        txtPostOwner = findViewById(R.id.txtPostDetail_Owner);
         txtPostAddress = findViewById(R.id.txtPostDetail_Address);
         txtPostWage = findViewById(R.id.txtPostDetail_Wage);
         txtPostContact = findViewById(R.id.txtPostDetail_Contact);
         txtPostDesc = findViewById(R.id.txtPostDetail_Desc);
         grdImages = findViewById(R.id.grdPostDetail_Photos);
-
-
+        setOwnerName();
         setImgs();
-
-        //Change it back later - Ryan
-        String userID = "Ryan";
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         btnBack = findViewById(R.id.btnPostDetail_Back);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -117,5 +123,18 @@ public class PostDetail extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void setOwnerName(){
+        FirebaseDatabase.getInstance().getReference("users/").child(post.getOwnerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                txtPostOwner.setText(snapshot.child("name").getValue(String.class));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
