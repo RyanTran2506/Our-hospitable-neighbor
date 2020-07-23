@@ -25,9 +25,13 @@ import android.widget.Toast;
 
 import com.example.ourhospitableneighbor.MainActivity;
 import com.example.ourhospitableneighbor.R;
+import com.example.ourhospitableneighbor.Register;
 import com.example.ourhospitableneighbor.data.LoginDataSource;
-import com.example.ourhospitableneighbor.ui.login.LoginViewModel;
-import com.example.ourhospitableneighbor.ui.login.LoginViewModelFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import io.reactivex.rxjava3.internal.schedulers.ExecutorScheduler;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,12 +50,15 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        login_register = findViewById(R.id.login_register);
+        login_register = findViewById(R.id.linkLogin);
         login_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginDataSource loginDataSource = new LoginDataSource();
                 loginDataSource.init();
+
+                Intent intent = new Intent(LoginActivity.this, Register.class);
+                startActivity(intent);
             }
         });
 
@@ -126,8 +133,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+
+                Executors.newSingleThreadExecutor().submit(() -> loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString()));
             }
         });
     }

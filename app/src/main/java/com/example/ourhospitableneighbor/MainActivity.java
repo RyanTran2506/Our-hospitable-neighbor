@@ -3,37 +3,57 @@ package com.example.ourhospitableneighbor;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
+    private TextView txtUserName;
+    private ImageView imgAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        View navHeader = navView.getHeaderView(0);
+        txtUserName = navHeader.findViewById(R.id.nav_header_textView);
+        imgAvatar = navHeader.findViewById(R.id.nav_header_imageView);
+
         setUpNavigation();
+        fillCurrentUser();
 
         // Make status bar translucent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
-
     }
 
     @Override
@@ -60,17 +80,20 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, History.class);
         startActivity(intent);
     }
+
     private void onClickLogIn() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-    private void onClickPostDetail(){
+
+    private void onClickPostDetail() {
         Intent intent = new Intent(this, PostDetail.class);
         startActivity(intent);
     }
 
     private void onClickLogOut() {
-        Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     private void onClickSearch() {
@@ -94,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Add the hamburger button
-        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
 
@@ -125,5 +147,34 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private void fillCurrentUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            txtUserName.setText("Not logged in");
+            return;
+        }
+
+        FirebaseDatabase.getInstance().getReference("users/").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                txtUserName.setText(snapshot.child("name").getValue(String.class));
+
+                String avatarLink = snapshot.child("avatarLink").getValue(String.class);
+                if (avatarLink == null || avatarLink.isEmpty()) return;
+
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference("avatars");
+                Glide.with(MainActivity.this).load(storageReference.child(avatarLink))
+                        .placeholder(R.drawable.placeholder_square)
+                        .into(imgAvatar);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+
     }
 }

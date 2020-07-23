@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OurHospitableNeighbor</string>
+    <string name="app_name">Our Hospitable Neighbors</string>
     <string name="navigation_drawer_open">Open side menu</string>
     <string name="navigation_drawer_close">Close side menu</string>
     <string name="log_out">Log out</string>

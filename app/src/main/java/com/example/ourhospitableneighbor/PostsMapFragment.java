@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -132,6 +133,13 @@ public class PostsMapFragment extends Fragment {
                 v.setMarker(marker);
                 return v;
             }
+        });
+        clusterManager.getMarkerCollection().setOnInfoWindowClickListener(marker -> {
+            Intent intent = new Intent(getContext(), PostDetail.class);
+            Post post = (Post) marker.getTag();
+            if (post == null) return;
+            intent.putExtra("postID", post.getPostID());
+            getContext().startActivity(intent);
         });
 
         map.setOnCameraIdleListener(() -> {
