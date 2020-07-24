@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickMyProfile() {
-        // TODO: Navigate to a different activity
-        Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AboutMe.class);
+        startActivity(intent);
     }
 
     private void onClickMyPosts() {

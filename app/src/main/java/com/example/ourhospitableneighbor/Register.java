@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ourhospitableneighbor.data.model.LoggedInUser;
+import com.example.ourhospitableneighbor.model.User;
 import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,7 +50,7 @@ public class Register extends AppCompatActivity {
         rName = findViewById(R.id.txtName);
         rDOB = findViewById(R.id.txtDOB);
         rPhone = findViewById(R.id.txtPhoneReg);
-        rPwd = findViewById(R.id.txtPwd);
+        rPwd = findViewById(R.id.txtPhoneNumber);
         rConfirmEmail = findViewById(R.id.txtConfirmPwd);
         btnrSignUp = findViewById(R.id.btnSignup);
         linkrLogin = findViewById(R.id.linkLogin);
@@ -126,11 +125,13 @@ public class Register extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                            myRef.child("name").setValue(rName.getText().toString());
+                            User newUser = new User(fullName, "avatars/default.jpg", dob, phone);
+                            myRef.setValue(newUser);
+                            //myRef.child("name").setValue(rName.getText().toString());
+
                             Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
                             updateUI(user);
-                            goToLogin();
-
+                            //goToLogin();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());

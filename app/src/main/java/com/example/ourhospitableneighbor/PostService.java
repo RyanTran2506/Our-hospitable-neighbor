@@ -65,7 +65,10 @@ public class PostService {
                 
                 post.setUserCurrentLocation(location.orElse(null));
                 if (lat >= area.southwest.latitude && lat <= area.northeast.latitude && lng >= area.southwest.longitude && lng <= area.northeast.longitude) {
-                    postsInArea.add(post);
+                    if(post.getWorkerID().isEmpty())
+                    {
+                        postsInArea.add(post);
+                    }
                 }
             }
 
@@ -199,6 +202,7 @@ public class PostService {
         }
         return result;
     }
+
     public List<Post> getTakenPosts(String userID){
         List<Post> result = new ArrayList<>();
         for (Post curPost:posts) {
