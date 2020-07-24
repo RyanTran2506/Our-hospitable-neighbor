@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ourhospitableneighbor.model.Post;
 import com.example.ourhospitableneighbor.model.User;
 import com.example.ourhospitableneighbor.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,12 +22,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class Register extends AppCompatActivity {
+public class Register<mDatabase, postListener> extends AppCompatActivity {
 
     EditText rEmail;
     EditText rPwd;
@@ -66,13 +71,13 @@ public class Register extends AppCompatActivity {
 
 
     public void goToLogin() {
-        Intent intent = new Intent(Register.this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Log.i(TAG, user.getDisplayName());
+//            Log.i(TAG, user.getDisplayName());
             goToLogin();
         } else {
             Log.i(TAG, "User null");
@@ -130,8 +135,9 @@ public class Register extends AppCompatActivity {
                             //myRef.child("name").setValue(rName.getText().toString());
 
                             Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
-                            updateUI(user);
-                            //goToLogin();
+//                            updateUI(user);
+                            goToLogin();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -143,6 +149,27 @@ public class Register extends AppCompatActivity {
                 });
     }
 
+    private DatabaseReference mDatabase;
+// ...
+//    FirebaseDatabase mDatabase = FirebaseDatabase.getInstance().getReference()
+
+    ValueEventListener postListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            // Get Post object and use the values to update the UI
+            Post post = dataSnapshot.getValue(Post.class);
+            // ...
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // Getting Post failed, log a message
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            // ...
+        }
+    };
+//   mPostReference.addValueEventListener(postListener);
+
     private void getAvatarImages() {
         StorageReference ref = FirebaseStorage.getInstance().getReference("avatars");
         ref.listAll().addOnSuccessListener(result -> {
@@ -151,4 +178,8 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 }

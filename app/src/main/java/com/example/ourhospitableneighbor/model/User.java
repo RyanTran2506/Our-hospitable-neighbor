@@ -2,9 +2,6 @@ package com.example.ourhospitableneighbor.model;
 
 import com.google.firebase.database.DataSnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
     private String name;
     private String avatarLink;
