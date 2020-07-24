@@ -12,91 +12,139 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/AbtMeScrn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="About Me"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+
+<TableRow
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2">
+    >
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="name"
+        android:textSize="25dp" />
+
+    <Button
+        android:id="@+id/buttonEditName"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/ic_baseline_create_24"
+         />
+
+</TableRow>
+
+<TableRow
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2">
+
+    <TextView
+        android:id="@+id/profileBirth"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:textSize="25dp"
+        android:text="birth"/>
+
+    <Button
+        android:id="@+id/buttonEditBirthday"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/ic_baseline_create_24"
+        />
+</TableRow>
+
+<TableRow
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2">
+    >
+    <TextView
+        android:id="@+id/profilePhone"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="25dp"
+        android:text="phone" />
+
+
+    <Button
+        android:id="@+id/buttonEditPhone"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/ic_baseline_create_24"
+        />
+
+
+</TableRow>
+
+
+
+     <TableRow
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:weightSum="2">
+         <TextView
+             android:id="@+id/profileEmail"
+             android:layout_width="350dp"
+             android:layout_height="50dp"
+             android:layout_marginTop="50dp"
+             android:layout_marginLeft="30dp"
+             android:textSize="25dp"
+             android:text="em" />
+
+
+         <Button
+             android:id="@+id/buttonEditEmail"
+             style="?android:attr/borderlessButtonStyle"
+             android:layout_width="30dp"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="1dp"
+             android:layout_marginBottom="1dp"
+             android:background="@drawable/ic_baseline_create_24"
+             />
+
+
+     </TableRow>
 
         <TextView
-            android:id="@+id/loginscrn"
+            android:id="@+id/btnLog_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="About Me"
-            android:textSize="25dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/fstTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:text="Full Name" />
+            android:layout_marginBottom="20dp"
+            android:text="@string/log_out"
+            android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:ems="10" />
-        <TextView
-            android:id="@+id/secTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:text="Date of birth" />
-
-        <EditText
-            android:id="@+id/txtDOB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:ems="10" />
-        <TextView
-            android:id="@+id/thirdTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Email" />
-
-        <EditText
-            android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:ems="10" />
-
-        <TextView
-            android:id="@+id/fourTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Password" />
-
-        <EditText
-            android:id="@+id/txtPwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-        <TextView
-            android:id="@+id/fifthTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Confirm Password" />
-
-        <EditText
-            android:id="@+id/txtConfirmPwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-
-
+        <!--            android:onClick="navigateLogOut"-->
 
 
     </LinearLayout>
