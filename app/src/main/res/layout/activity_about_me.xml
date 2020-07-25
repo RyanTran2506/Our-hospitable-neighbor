@@ -21,7 +21,8 @@
                 android:layout_marginBottom="20dp"
                 android:text="About Me"
                 android:textSize="35dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"> </TextView>
+<!--                android:onClick="buttonClickedEditName"/>-->
 
 
 <TableRow
@@ -29,25 +30,30 @@
     android:layout_height="wrap_content"
     android:weightSum="2">
     >
+    <ImageView
+        android:id="@+id/nameImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/name"
+        android:layout_marginTop="30dp"/>
 
     <TextView
         android:id="@+id/profileName"
-        android:layout_width="350dp"
+        android:layout_width="204dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
         android:text="name"
         android:textSize="25dp" />
 
     <Button
         android:id="@+id/buttonEditName"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ic_baseline_create_24"
-         />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_baseline_create_24" />
 
 </TableRow>
 
@@ -56,22 +62,29 @@
     android:layout_height="wrap_content"
     android:weightSum="2">
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/date"
+        android:layout_marginTop="30dp"/>
+
     <TextView
         android:id="@+id/profileBirth"
-        android:layout_width="350dp"
+        android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="50dp"
-        android:textSize="25dp"
-        android:text="birth"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:text="birth"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/buttonEditBirthday"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/ic_baseline_create_24"
         />
 </TableRow>
@@ -82,12 +95,18 @@
     android:layout_height="wrap_content"
     android:weightSum="2">
     >
+    <ImageView
+        android:id="@+id/phoneimg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/phone"
+        android:layout_marginTop="30dp"/>
     <TextView
         android:id="@+id/profilePhone"
-        android:layout_width="350dp"
+        android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
         android:textSize="25dp"
         android:text="phone" />
 
@@ -95,10 +114,10 @@
     <Button
         android:id="@+id/buttonEditPhone"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/ic_baseline_create_24"
         />
 
@@ -109,38 +128,45 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:weightSum="2">
+
+         <ImageView
+             android:id="@+id/emailImg"
+             android:layout_width="50dp"
+             android:layout_height="50dp"
+             app:srcCompat="@drawable/email"
+             android:layout_marginTop="30dp"/>
          <TextView
              android:id="@+id/profileEmail"
-             android:layout_width="350dp"
+             android:layout_width="200dp"
              android:layout_height="50dp"
-             android:layout_marginTop="50dp"
-             android:layout_marginLeft="30dp"
+             android:layout_marginTop="30dp"
+             android:layout_marginLeft="10dp"
              android:textSize="25dp"
-             android:text="em" />
+             android:text="" />
 
 
          <Button
              android:id="@+id/buttonEditEmail"
              style="?android:attr/borderlessButtonStyle"
-             android:layout_width="30dp"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="1dp"
-             android:layout_marginBottom="1dp"
-             android:background="@drawable/ic_baseline_create_24"
-             />
+             android:layout_width="50dp"
+             android:layout_height="50dp"
+             android:layout_marginLeft="10dp"
+             android:layout_marginTop="30dp"
+             android:background="@drawable/ic_baseline_create_24" />
 
 
      </TableRow>
 
         <TextView
-            android:id="@+id/btnLog_out"
+            android:id="@+id/txtLog_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+
             android:text="@string/log_out"
-            android:textSize="20dp" />
+            android:textSize="25dp" />
 
         <!--            android:onClick="navigateLogOut"-->
 
