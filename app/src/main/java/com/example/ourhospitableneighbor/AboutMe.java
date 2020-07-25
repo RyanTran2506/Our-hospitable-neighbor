@@ -79,6 +79,27 @@ public class AboutMe extends AppCompatActivity {
                 buttonClickedEditName();
             }
         });
+
+        btnEditDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonClickEditDOB();
+            }
+        });
+
+        btnEditEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonClickEditEmail();
+            }
+        });
+
+        btnEditPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonClickEditPhone();
+            }
+        });
     }
 
     private void getUser() {
@@ -105,7 +126,7 @@ public class AboutMe extends AppCompatActivity {
     public void buttonClickedEditName() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_edit_name_aboutme, null);
-        final EditText etUsername = alertLayout.findViewById(R.id.et_username);
+//        final EditText etUsername = alertLayout.findViewById(R.id.edit_username);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Name Edit");
         // this is set the view from XML inside AlertDialog
@@ -119,21 +140,125 @@ public class AboutMe extends AppCompatActivity {
             }
         });
 
-       final EditText userFullName = findViewById(R.id.et_username);
+       final EditText userFullName = findViewById(R.id.edit_username);
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 String name = userFullName.getText().toString();
-//                String DOB = profileDOBTextView.getText().toString();
-//                String phoneno = profilePhonenoTextView.getText().toString();
-//                String email = profileEmailTextView.getText().toString();
-                //FirebaseDatabase database = FirebaseDatabase.getInstance();
-                //DatabaseReference myRef = database.getReference("users").child(user.getEmail());
-               // myRef.setValue(user);
-               // databaseReference.child(user.getName()).child("name").setValue(user.getName());
-               // etUsername.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+               myRef.setValue(user);
+               databaseReference.child(user.getName()).child("name").setValue(user.getName());
+
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+    public void buttonClickEditDOB() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
+//        final EditText etUsername = alertLayout.findViewById(R.id.edit_dob);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Date Edit");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        Log.v("LOG", "inside dialog");
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        final EditText userDOB = findViewById(R.id.edit_dob);
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String dob = userDOB.getText().toString();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                myRef.setValue(user);
+                databaseReference.child(user.getName()).child("dob").setValue(user.getName());
+
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+    public void buttonClickEditPhone() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
+//        final EditText etUsername = alertLayout.findViewById(R.id.edit_phone);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Phone Edit");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        Log.v("LOG", "inside dialog");
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        final EditText userPhone = findViewById(R.id.edit_phone);
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String dob = userPhone.getText().toString();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                myRef.setValue(user);
+                databaseReference.child(user.getName()).child("dob").setValue(user.getName());
+
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
+    public void buttonClickEditEmail() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_edit_email, null);
+//        final EditText etUsername = alertLayout.findViewById(R.id.edit_mail);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Email Edit");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        Log.v("LOG", "inside dialog");
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        final EditText userEmail = findViewById(R.id.edit_mail);
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String email = userEmail.getText().toString();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                myRef.setValue(user);
+                databaseReference.child(user.getName()).child("email").setValue(user.getName());
+
 
             }
         });
