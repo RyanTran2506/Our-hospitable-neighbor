@@ -32,6 +32,9 @@ import com.google.firebase.storage.StorageReference;
 public class AboutMe extends AppCompatActivity {
     TextView txtName, txtDOB, txtEmail, txtPhoneNumber;
     User user;
+
+    private String uid;
+
     DatabaseReference databaseReference;
     TextView profileNameTextView;
     TextView profilePhonenoTextView;
@@ -103,7 +106,7 @@ public class AboutMe extends AppCompatActivity {
     }
 
     private void getUser() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -126,7 +129,6 @@ public class AboutMe extends AppCompatActivity {
     public void buttonClickedEditName() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_edit_name_aboutme, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.edit_username);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Name Edit");
         // this is set the view from XML inside AlertDialog
@@ -140,18 +142,16 @@ public class AboutMe extends AppCompatActivity {
             }
         });
 
-       final EditText userFullName = findViewById(R.id.edit_username);
-
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            final EditText userFullName = findViewById(R.id.edit_username);
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 String name = userFullName.getText().toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
-               myRef.setValue(user);
-               databaseReference.child(user.getName()).child("name").setValue(user.getName());
-
+                DatabaseReference myRef = database.getReference("users").child(uid);
+                user.setName(name);
+                myRef.setValue(user);
+                profileNameTextView.setText(name);
 
             }
         });
@@ -161,7 +161,6 @@ public class AboutMe extends AppCompatActivity {
     public void buttonClickEditDOB() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.edit_dob);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Date Edit");
         // this is set the view from XML inside AlertDialog
@@ -180,13 +179,13 @@ public class AboutMe extends AppCompatActivity {
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                final EditText userDOB = findViewById(R.id.edit_dob);
                 String dob = userDOB.getText().toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                DatabaseReference myRef = database.getReference("users").child(uid);
+                user.setDob(dob);
                 myRef.setValue(user);
-                databaseReference.child(user.getName()).child("dob").setValue(user.getName());
-
+                profileDOBTextView.setText(dob);
 
             }
         });
@@ -196,7 +195,6 @@ public class AboutMe extends AppCompatActivity {
     public void buttonClickEditPhone() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.edit_phone);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Phone Edit");
         // this is set the view from XML inside AlertDialog
@@ -210,17 +208,17 @@ public class AboutMe extends AppCompatActivity {
             }
         });
 
-        final EditText userPhone = findViewById(R.id.edit_phone);
-
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String dob = userPhone.getText().toString();
+                final EditText userPhone = findViewById(R.id.edit_phone);
+                String phoneNum = userPhone.getText().toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                DatabaseReference myRef = database.getReference("users").child(uid);
+                user.setPhoneNumber(phoneNum);
                 myRef.setValue(user);
-                databaseReference.child(user.getName()).child("dob").setValue(user.getName());
+                profilePhonenoTextView.setText(phoneNum);
 
 
             }
@@ -233,7 +231,6 @@ public class AboutMe extends AppCompatActivity {
     public void buttonClickEditEmail() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_edit_email, null);
-//        final EditText etUsername = alertLayout.findViewById(R.id.edit_mail);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Email Edit");
         // this is set the view from XML inside AlertDialog
@@ -247,19 +244,18 @@ public class AboutMe extends AppCompatActivity {
             }
         });
 
-        final EditText userEmail = findViewById(R.id.edit_mail);
+
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                final EditText userEmail = findViewById(R.id.edit_mail);
                 String email = userEmail.getText().toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
+                DatabaseReference myRef = database.getReference("users").child(uid);
+                user.setEmail(email);
                 myRef.setValue(user);
-                databaseReference.child(user.getName()).child("email").setValue(user.getName());
-
-
+                profileEmailTextView.setText(email);
             }
         });
         AlertDialog dialog = alert.create();
