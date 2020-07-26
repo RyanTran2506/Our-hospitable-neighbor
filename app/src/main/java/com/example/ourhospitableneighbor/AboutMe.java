@@ -140,24 +140,25 @@ public class AboutMe extends AppCompatActivity {
             }
         });
 
-       final EditText userFullName = findViewById(R.id.edit_username);
+        final EditText userFullName = alertLayout.findViewById(R.id.edit_username);
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 String name = userFullName.getText().toString();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users").child(user.getEmail());
-               myRef.setValue(user);
-               databaseReference.child(user.getName()).child("name").setValue(user.getName());
 
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.child("users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("name").setValue(name);
 
+                profileNameTextView.setText(name);
             }
         });
         AlertDialog dialog = alert.create();
         dialog.show();
     }
+
     public void buttonClickEditDOB() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
@@ -193,6 +194,7 @@ public class AboutMe extends AppCompatActivity {
         AlertDialog dialog = alert.create();
         dialog.show();
     }
+
     public void buttonClickEditPhone() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_editdob, null);
@@ -258,7 +260,6 @@ public class AboutMe extends AppCompatActivity {
                 DatabaseReference myRef = database.getReference("users").child(user.getEmail());
                 myRef.setValue(user);
                 databaseReference.child(user.getName()).child("email").setValue(user.getName());
-
 
             }
         });
