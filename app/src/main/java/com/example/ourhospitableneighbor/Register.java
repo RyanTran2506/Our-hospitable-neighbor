@@ -128,9 +128,11 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //save to firebase
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                            User newUser = new User(fullName, "avatars/default.jpg", dob, phone);
+                            User newUser = new User(fullName,email, dob, phone);
                             myRef.setValue(newUser);
                             //myRef.child("name").setValue(rName.getText().toString());
 

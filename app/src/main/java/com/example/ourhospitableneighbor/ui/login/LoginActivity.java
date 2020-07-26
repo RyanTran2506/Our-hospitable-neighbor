@@ -174,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Wrong email or password", Toast.LENGTH_SHORT).show();
-                            loadingProgressBar.setVisibility(View.INVISIBLE);
+                            loadingProgressBar.setVisibility(View.GONE);
                         }
                     }
                 });

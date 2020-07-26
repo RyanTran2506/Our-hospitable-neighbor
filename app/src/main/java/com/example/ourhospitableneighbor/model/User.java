@@ -4,20 +4,20 @@ import com.google.firebase.database.DataSnapshot;
 
 public class User {
     private String name;
-    private String avatarLink;
+    private String email;
     private String dob;
     private String phoneNumber;
 
     public User(){
         this.name = "";
-        this.avatarLink = "";
+        this.email = "";
         this.dob  = "";
         this.phoneNumber = "";
     }
 
-    public User(String name, String avatarLink, String dob, String phoneNumber){
+    public User(String name, String email, String dob, String phoneNumber){
         this.name = name;
-        this.avatarLink = avatarLink;
+        this.email = email;
         this.dob = dob;
         this.phoneNumber = phoneNumber;
     }
@@ -26,7 +26,7 @@ public class User {
         // TODO: handle the remaining fields
         User user = new User();
         user.setName(doc.child("name").getValue(String.class));
-        user.setAvatarLink(doc.child("avatarLink").getValue(String.class));
+        user.setEmail(doc.child("email").getValue(String.class));
         user.setDob(doc.child("dob").getValue(String.class));
         user.setPhoneNumber(doc.child("phoneNumber").getValue(String.class));
 
@@ -41,12 +41,12 @@ public class User {
         this.name = name;
     }
 
-    public String getAvatarLink() {
-        return avatarLink;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAvatarLink(String avatarLink) {
-        this.avatarLink = avatarLink;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getDob() {
