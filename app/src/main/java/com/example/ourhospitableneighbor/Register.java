@@ -71,13 +71,14 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
 
 
     public void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-//            Log.i(TAG, user.getDisplayName());
+            // Log.i(TAG, user.getDisplayName());
             goToLogin();
         } else {
             Log.i(TAG, "User null");
@@ -132,7 +133,7 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
                             //save to firebase
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                            User newUser = new User(fullName,email, dob, phone);
+                            User newUser = new User(fullName, email, dob, phone);
                             myRef.setValue(newUser);
                             //myRef.child("name").setValue(rName.getText().toString());
 
@@ -180,8 +181,6 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
             }
         });
     }
-
-
 
 
 }

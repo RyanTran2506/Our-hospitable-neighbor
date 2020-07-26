@@ -55,11 +55,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            startMainActivity();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        mAuth = FirebaseAuth.getInstance();
         usernameEditText = findViewById(R.id.login_txtEmail);
         passwordEditText = findViewById(R.id.login_txtPwd);
         loginButton = findViewById(R.id.login_btnLogin);
@@ -169,8 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                             loadingProgressBar.setVisibility(View.VISIBLE);
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(LoginActivity.this, "Log in succesfullly", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            startMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Wrong email or password", Toast.LENGTH_SHORT).show();
@@ -178,5 +183,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

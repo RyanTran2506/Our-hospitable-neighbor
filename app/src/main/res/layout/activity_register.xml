@@ -62,11 +62,12 @@
             android:ems="10"
             android:hint="DD/MM/YYYY"
             android:inputType="datetime" />
+
         <TextView
             android:id="@+id/thirdTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="40dp"
             android:text="Email" />
 
         <EditText
@@ -76,11 +77,12 @@
             android:layout_marginLeft="40dp"
             android:ems="10"
             android:inputType="textEmailAddress"/>
+
         <TextView
             android:id="@+id/sixTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="40dp"
             android:text="Phone number" />
 
         <EditText
@@ -92,11 +94,11 @@
             android:inputType="phone" />
 
         <TextView
-        android:id="@+id/fourTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:text="Password" />
+            android:id="@+id/fourTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="Password" />
 
         <EditText
             android:id="@+id/txtPhoneNumber"
@@ -110,7 +112,7 @@
             android:id="@+id/fifthTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="40dp"
             android:text="Confirm Password" />
 
         <EditText

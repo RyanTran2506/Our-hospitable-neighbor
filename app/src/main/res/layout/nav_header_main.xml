@@ -29,7 +29,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/img_avatar_background"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             android:src="@drawable/placeholder_square" />
 
         <TextView
