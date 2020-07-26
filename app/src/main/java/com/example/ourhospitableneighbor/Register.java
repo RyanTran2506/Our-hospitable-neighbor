@@ -71,8 +71,9 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
 
 
     public void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     private void updateUI(FirebaseUser user) {
