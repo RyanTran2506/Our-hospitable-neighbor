@@ -135,24 +135,17 @@
              android:layout_height="50dp"
              app:srcCompat="@drawable/email"
              android:layout_marginTop="30dp"/>
+
          <TextView
              android:id="@+id/profileEmail"
-             android:layout_width="200dp"
-             android:layout_height="50dp"
-             android:layout_marginTop="30dp"
-             android:layout_marginLeft="10dp"
-             android:textSize="25dp"
-             android:text="" />
-
-
-         <Button
-             android:id="@+id/buttonEditEmail"
-             style="?android:attr/borderlessButtonStyle"
-             android:layout_width="50dp"
+             android:layout_width="246dp"
              android:layout_height="50dp"
              android:layout_marginLeft="10dp"
              android:layout_marginTop="30dp"
-             android:background="@drawable/ic_baseline_create_24" />
+             android:text=""
+             android:textSize="25dp" />
+
+
 
 
      </TableRow>

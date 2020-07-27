@@ -38,7 +38,7 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
     EditText rName;
     EditText rDOB;
     EditText rPhone;
-    EditText rConfirmEmail;
+    EditText rConfirmPass;
     Button btnrSignUp;
     FirebaseAuth mAuth;
     TextView linkrLogin;
@@ -56,7 +56,7 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
         rDOB = findViewById(R.id.txtDOB);
         rPhone = findViewById(R.id.txtPhoneReg);
         rPwd = findViewById(R.id.txtPhoneNumber);
-        rConfirmEmail = findViewById(R.id.txtConfirmPwd);
+        rConfirmPass = findViewById(R.id.txtConfirmPwd);
         btnrSignUp = findViewById(R.id.btnSignup);
         linkrLogin = findViewById(R.id.linkLogin);
         loadingProgressBar = findViewById(R.id.loading);
@@ -68,8 +68,6 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
             }
         });
     }
-
-
     public void goToLogin() {
         Intent intent = new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -86,40 +84,59 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
     }
 
 
-    public void onSignUpClick(View v) {
+    private boolean isValidatedUser(User newUser) {
 
-        String fullName = rName.getText().toString();
-        String email = rEmail.getText().toString();
         String password = rPwd.getText().toString();
-        String dob = rDOB.getText().toString();
-        String phone = rPhone.getText().toString();
+        String confirmPassword = rConfirmPass.getText().toString();
 
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(newUser.getEmail())) {
             rEmail.setError("Email is required");
-            return;
+            return false;
         }
 
         if (TextUtils.isEmpty(password)) {
             rPwd.setError("Password is required");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(newUser.getName())) {
+            rName.setError("Full name is required");
+            return false;
+        }
+        if (password.length() < 5) {
+            rPwd.setError("Password mus be more than 5 characters");
+            return false;
+        } else if (!password.equals(confirmPassword)) {
+            rPwd.setError("Confirm password must match");
+            return false;
+        }
+        if (TextUtils.isEmpty(newUser.getPhoneNumber())) {
+            rPhone.setError("Phone is required");
+            return false;
+        }
+        if (TextUtils.isEmpty(newUser.getDob())) {
+            rDOB.setError("Date is required");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void onSignUpClick(View v) {
+
+        String fullName = rName.getText().toString();
+        String email = rEmail.getText().toString();
+        String dob = rDOB.getText().toString();
+        String phone = rPhone.getText().toString();
+        String password = rPwd.getText().toString();
+
+        User newUser = new User(fullName, email, dob, phone);
+
+        if (!isValidatedUser(newUser)) {
             return;
         }
 
-        if (TextUtils.isEmpty(fullName)) {
-            rName.setError("Full name is required");
-            return;
-        }
-        if (password.length() < 6) {
-            rPwd.setError("Password mus be more than 6 characters");
-        }
-        if (TextUtils.isEmpty(phone)) {
-            rPhone.setError("Email is required");
-            return;
-        }
-        if (TextUtils.isEmpty(dob)) {
-            rDOB.setError("Email is required");
-            return;
-        }
-        loadingProgressBar.setVisibility(View.VISIBLE);
+        loadingProgressBar.setVisibility(View.GONE);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -129,22 +146,20 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
                             //save to firebase
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("users").child(user.getUid());
                             User newUser = new User(fullName, email, dob, phone);
                             myRef.setValue(newUser);
                             //myRef.child("name").setValue(rName.getText().toString());
-
                             Toast.makeText(Register.this, "User Created.", Toast.LENGTH_SHORT).show();
-//                            updateUI(user);
+                            //updateUI(user);
                             goToLogin();
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
 
@@ -173,14 +188,7 @@ public class Register<mDatabase, postListener> extends AppCompatActivity {
     };
 //   mPostReference.addValueEventListener(postListener);
 
-    private void getAvatarImages() {
-        StorageReference ref = FirebaseStorage.getInstance().getReference("avatars");
-        ref.listAll().addOnSuccessListener(result -> {
-            for (StorageReference fileRef : result.getItems()) {
 
-            }
-        });
-    }
 
 
 }

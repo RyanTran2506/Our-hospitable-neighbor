@@ -161,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (pass.length() < 6) {
-            Toast.makeText(this, "Password mus be more than 6 characters", Toast.LENGTH_SHORT).show();
+        if (pass.length() < 5) {
+            Toast.makeText(this, "Password mus be more than 5 characters", Toast.LENGTH_SHORT).show();
         }
 
 
