@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register"
-    android:gravity="center">
+    android:gravity="center"
+    tools:context=".Register">
 
 
     <LinearLayout
@@ -32,95 +32,117 @@
 
         <TextView
             android:id="@+id/fstTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
-            android:gravity="center"
+            android:layout_marginRight="40dp"
+            android:gravity="left"
             android:text="Full Name" />
 
         <EditText
             android:id="@+id/txtName"
-            android:layout_width="254dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:ems="10"
             android:hint="First Name/LastName" />
+
         <TextView
             android:id="@+id/secTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:text="Date of birth" />
 
         <EditText
             android:id="@+id/txtDOB"
-            android:layout_width="252dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+
             android:ems="10"
             android:hint="DD/MM/YYYY"
             android:inputType="datetime" />
 
         <TextView
             android:id="@+id/thirdTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:text="Email" />
 
         <EditText
             android:id="@+id/txtEmail"
-            android:layout_width="249dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:ems="10"
             android:inputType="textEmailAddress" />
 
         <TextView
             android:id="@+id/sixTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:text="Phone number" />
 
         <EditText
             android:id="@+id/txtPhoneReg"
-            android:layout_width="245dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+
             android:ems="10"
             android:inputType="phone" />
 
         <TextView
             android:id="@+id/fourTxt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:text="Password" />
 
         <EditText
             android:id="@+id/txtPhoneNumber"
-            android:layout_width="243dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Password more than 6 charaters"/>
+            android:hint="Password more than 6 charaters"
+            android:inputType="textPassword" />
 
         <TextView
             android:id="@+id/fifthTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+
             android:text="Confirm Password" />
 
         <EditText
             android:id="@+id/txtConfirmPwd"
-            android:layout_width="247dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:ems="10"
             android:hint="Re-enter your password"
             android:inputType="textPassword" />
@@ -130,7 +152,10 @@
             android:id="@+id/btnSignup"
             android:layout_width="99dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="150dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:onClick="onSignUpClick"
             android:text="Sign Up" />
 
@@ -138,20 +163,23 @@
             android:id="@+id/linkLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:onClick="onSignUpClick"
             android:text="Already Registered? Login here"
             android:textColor="#3F51B5"
             android:textSize="20dp" />
+
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
-            android:visibility="gone"
-             />
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>
